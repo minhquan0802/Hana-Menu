@@ -1,2 +1,5 @@
 # File thiết kế / PDF menu gốc — chỉ dùng trên máy, không đưa lên GitHub
 /PDF/
+
+# Gói Node cho script build menu (cài lại bằng npm install)
+node_modules/

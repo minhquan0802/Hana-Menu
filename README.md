@@ -1,61 +1,76 @@
 # Hana BBQ & Hot Pot Buffet — Website
 
-Web tĩnh (HTML/CSS/JS thuần, không cần cài đặt hay build). Mở `index.html` bằng trình duyệt là chạy.
+Web tĩnh (HTML/CSS/JS thuần), host bằng GitHub Pages. Mở `index.html` bằng trình duyệt là chạy.
+Node.js **chỉ cần trên máy** khi cập nhật cuốn menu từ PDF — GitHub Pages không chạy Node và cũng không cần.
 
 ## Cấu trúc
 
 ```
-index.html            Trang chủ (giới thiệu, bảng giá, danh mục menu, chi nhánh)
-menu.html             Cuốn menu lật trang
-credits.html          Nguồn và giấy phép ảnh minh họa
-data/data.js          ★ DỮ LIỆU — giá, menu, chi nhánh, hotline, giới thiệu
-css/style.css         Giao diện chung (màu, font, header/footer, trang chủ)
-css/menu.css          Giao diện cuốn menu
-js/common.js          Hàm dùng chung
-js/main.js            Dựng nội dung trang chủ
-js/menu-book.js       Dựng các trang của cuốn menu + hiệu ứng lật
-js/vendor/            Thư viện lật trang StPageFlip 2.0.7 (MIT) — không cần sửa
-assets/images/        logo.png, ảnh chi nhánh
-assets/images/menu/   Ảnh món ăn
+index.html              Trang chủ (giới thiệu, bảng giá, thực đơn, chi nhánh)
+menu.html               Cuốn menu lật trang (trang = ảnh xuất từ PDF menu)
+data/data.js            ★ DỮ LIỆU — giá, chi nhánh, hotline, giới thiệu, mục của cuốn menu
+data/menu-pages.js      Tự tạo bởi `npm run build:menu` — không sửa tay
+css/style.css           Giao diện chung + trang chủ
+css/menu.css            Giao diện trang cuốn menu
+js/common.js            Hàm dùng chung
+js/main.js              Dựng nội dung trang chủ
+js/menu-book.js         Cuốn menu: mục lục, tiếng lật, phím, lăn chuột
+js/flipbook.js          Bộ lật trang (CSS 3D) — lật liền nhiều tờ, kéo trang theo con trỏ
+assets/sounds/          Tiếng lật trang (lấy từ menu cũ)
+assets/menu-pages/      Ảnh các trang menu (tự tạo bởi `npm run build:menu`)
+assets/images/          logo, ảnh trang chủ (site/), ảnh món minh họa (menu/)
+tools/build-menu.mjs    Script chuyển PDF menu → trang cho cuốn menu
+PDF/                    File thiết kế/PDF gốc — chỉ để trên máy (đã .gitignore)
 ```
 
-## Cập nhật nội dung
+## Cập nhật cuốn menu (menu.html)
 
-Chỉ sửa **`data/data.js`** — mỗi phần đều có chú thích tiếng Việt ngay trong file.
+Cuốn menu dùng đúng các trang của file PDF thiết kế trên Canva, nên giống y bản in.
 
-- **Câu lớn đầu trang / mô tả:** sửa `brand.headline` và `brand.tagline`; dòng giới thiệu menu là `menuIntro`.
-- **Đổi giá:** sửa `adult` / `child` trong `pricing.packages` (ghi số, không dấu chấm: `236000`).
-- **Thêm món:** chép một dòng `{ name: ..., desc: ..., image: "", tags: [] }` trong danh mục, sửa lại.
-- **Thêm ảnh món:** bỏ ảnh vào `assets/images/menu/` (vd `ba-chi-bo.jpg`), ghi `image: "ba-chi-bo.jpg"`.
-  Nên dùng ảnh vuông, ~600×600px, dưới 200KB.
-- **Tên tiếng Anh:** `nameEn` cho món và danh mục (hiện nhỏ dưới tên tiếng Việt trong cuốn menu).
-- **Ảnh món:** ảnh hiện tại là **ảnh minh họa giấy phép mở** (Flickr/Wikimedia/rawpixel, CC BY 2.0 / CC0), nguồn ghi ở `credits.html`.
-  Khi có ảnh chụp món thật của Hana: chép đè file cùng tên trong `assets/images/menu/` (ảnh vuông ~720px),
-  rồi xóa dòng tương ứng trong `credits.html`.
-- **Thêm danh mục:** chép cả khối `{ id: ..., name: ..., items: [...] }`; `id` viết không dấu, không khoảng trắng.
+1. Sửa menu trên Canva → **Tải xuống PDF** → lưu vào thư mục `PDF/`
+   (mặc định: `PDF/HANA-menu-2026.pdf.pdf`).
+2. Lần đầu trên máy: `npm install`
+3. Chạy:
+   ```
+   npm run build:menu
+   ```
+   hoặc với file khác: `npm run build:menu -- "PDF/ten file moi.pdf"`
+4. Nếu thứ tự trang thay đổi: sửa số `page` trong `data/data.js` → `menuBook.sections`
+   (số trang đếm như trong PDF, trang bìa = 1).
+5. Mở `menu.html` kiểm tra → commit → push. GitHub Pages tự cập nhật sau ít phút.
+
+Khác:
+- Link thẳng tới mục: `menu.html#khai-vi`, `menu.html#bang-gia`… (dùng `id` trong `menuBook.sections`),
+  hoặc tới trang cụ thể: `menu.html#trang-12` — tiện làm mã QR đặt trên bàn.
+- Bố cục như trang menu cũ (hana.hethongpos.com): cuốn menu chiếm trọn chiều cao màn hình, mọi điều hướng
+  (link web, mục lục, số trang, bản chữ) ẩn trong bảng trượt — mở bằng nút tròn nhỏ ở góc trên bên trái.
+- Lật bằng kéo trang (mép trang bám theo con trỏ), bấm vào trang, vuốt, mũi tên hai bên, lăn chuột, phím ← →.
+  Bấm liên tục thì nhiều tờ lật liền cùng lúc. Có tiếng lật trang (bật/tắt trong bảng điều hướng).
+- PDF có 42 trang; web bỏ trang 20 (Gan Bò) và 25 (Bào Ngư Băng Trấn) cho giống menu cũ
+  — cấu hình ở `package.json` (`--bo 20,25`).
+- Ảnh trang chỉ tải quanh trang đang xem, nên mở menu nhanh dù cả cuốn ~7MB.
+
+## Cập nhật trang chủ
+
+Sửa **`data/data.js`** — mỗi phần đều có chú thích tiếng Việt ngay trong file.
+
+- **Đổi giá:** sửa `adult` / `child` trong `pricing.packages` (ghi số, không dấu chấm: `348000`).
+  Nhớ giữ khớp với trang Bảng giá trong PDF menu.
+- **Thực đơn trên trang chủ:** danh sách `menu` (danh mục + món) dùng cho các ô "Thực đơn" và số liệu.
+- **Ảnh trên trang chủ:** đều là ảnh của Hana, cắt từ ảnh gốc nhúng trong PDF menu.
+  Ô "Thực đơn" lấy từ `menuBook.sections` (mục có `image`, ảnh ở `assets/images/menu/`).
+- **Logo:** `assets/images/logo-hana.png` (từ `PDF/THIETKE/logo-hana.png`); `favicon.png` là bản vuông.
 - **Ẩn chi nhánh:** đổi `active: true` thành `active: false`.
-- **Tọa độ chi nhánh** (dùng cho nút "Tìm chi nhánh gần tôi"): trên Google Maps bấm chuột phải đúng vị trí
+- **Tọa độ chi nhánh** (nút "Tìm chi nhánh gần tôi"): trên Google Maps bấm chuột phải đúng vị trí
   nhà hàng → bấm dòng số đầu tiên để sao chép → dán vào `lat`, `lng`.
-  Tắt hẳn tính năng: đặt `nearestBranch: false`. Tính năng chỉ chạy khi web ở `https://`.
-- **Món tính tiền riêng** (đồ uống, món thêm): thêm `price: 30000`.
+  Tắt tính năng: `nearestBranch: false`. Tính năng chỉ chạy khi web ở `https://`.
 
 Sửa xong lưu file và tải lại trang (F5). Nếu trang hiện dòng báo lỗi đỏ, thường là do thiếu dấu phẩy `,` hoặc dấu nháy `"` ở chỗ vừa sửa.
 
-## Cuốn menu (menu.html)
-
-- Thứ tự: bìa → bảng giá | mục lục → các trang món → bìa sau.
-- Trang món: theo thứ tự danh mục trong `data.js`, món đánh số liên tục. Mỗi danh mục nằm trọn một trang
-  (không vừa phần còn lại thì sang trang mới); chỉ danh mục dài hơn cả một trang mới bị tách, kèm chữ "(tiếp)".
-  Mỗi trang in đĩa ảnh của tối đa 2 món đầu tiên có ảnh, tràn ra mép ngoài trang; số trên đĩa khớp số món.
-- Tự chia trang: món được xếp thử vào trang, hết chỗ thì sang trang mới — không cần tự đếm món.
-- Link thẳng tới danh mục: `menu.html#lau`, `menu.html#do-uong`, `menu.html#bang-gia`… (dùng `id` của danh mục) — tiện làm mã QR đặt trên bàn.
-- Lật bằng kéo góc trang, vuốt, nút ‹ ›, phím ← →; trên điện thoại hiện từng trang.
-
 ## Thiết kế
 
-Chủ đề "quán nướng lúc tối": đầu trang là vỉ nướng than hồng (SVG vẽ trong `index.html`), phần còn lại trình bày như tờ menu in.
-Màu và font khai báo ở đầu `css/style.css` (biến `--fire`, `--char`, `--butter`…). Font: Paytone One (tiêu đề, giá) và Lexend (nội dung).
-
-## Đưa lên mạng
-
-Upload nguyên thư mục lên bất kỳ hosting tĩnh nào: GitHub Pages, Netlify, Cloudflare Pages, hoặc hosting thường của tên miền `hana.vn`.
+- Trang chủ: phong cách tham khảo kingbbq.vn — header trắng, chữ in hoa Roboto, chữ viết tay Kristi,
+  xám `#D3D3D3` / nâu vàng `#C7AC92`. Biến màu/font ở đầu `css/style.css`.
+- Cuốn menu: theo trang menu cũ của Hana — nền gỗ, xanh navy `#012753`, cam `#F08020`,
+  font Montserrat / Open Sans (đúng font trong PDF menu).
+- Git tag `v1.0-giao-dien-1`: giao diện cũ "quán nướng lúc tối", để quay lại khi cần.

@@ -8,8 +8,6 @@
    - Chữ đặt trong dấu nháy: "…"
    - Mỗi mục trong danh sách cách nhau bằng dấu phẩy ,
    - Giá ghi số nguyên, KHÔNG có dấu chấm: 236000 (web tự hiện 236.000₫)
-   - Ảnh món: bỏ file vào assets/images/menu/ rồi ghi tên file vào "image".
-     Không có ảnh thì để image: "" — web vẫn hiển thị bình thường.
    - Sửa xong, tải lại trang (F5) để xem.
 
    (!) Số liệu hiện tại là DỮ LIỆU MẪU lấy từ các trang review (04/2025),
@@ -88,125 +86,42 @@ window.HANA_DATA = {
     ]
   },
 
-  /* ---------- MENU ----------
-     Dùng cho cả trang chủ và cuốn menu lật trang (menu.html).
-
-     Mỗi danh mục (category) gồm:
-       id     : mã ngắn, không dấu, không khoảng trắng (vd "bo-nuong")
-       name   : tên hiển thị
-       nameEn : tên tiếng Anh, hiện nhỏ bên dưới (có thể để "")
-       note   : ghi chú nhỏ cho cả danh mục (có thể để "")
-       items  : danh sách món
-
-     Mỗi món (item) gồm:
-       name   : tên món
-       nameEn : tên tiếng Anh (có thể để "")
-       desc   : mô tả ngắn (có thể để "")
-       image  : ảnh món trong assets/images/menu/ (có thể để "").
-                Ảnh vuông ~720×720px, món nằm giữa ảnh (web cắt thành đĩa tròn).
-                Ảnh hiện tại là ảnh minh họa giấy phép mở, nguồn ghi ở credits.html;
-                khi có ảnh chụp món thật của Hana thì chép đè file cùng tên.
-       tags   : nhãn, vd ["Bán chạy"], ["Cay"], ["Mới"] — để [] nếu không có
-       price  : CHỈ ghi khi món tính tiền riêng (đồ uống, món thêm).
-                Món nằm trong buffet thì bỏ trống hoặc xóa dòng price.
-
-     Thứ tự danh mục ở đây = thứ tự trong cuốn menu và trên trang chủ.
-     Cuốn menu tự chia trang theo độ dài; mỗi trang in ảnh của tối đa 2 món đầu tiên có ảnh.
-  */
+  /* ---------- MỤC "THỰC ĐƠN" TRÊN TRANG CHỦ ----------
+     Các ô lấy từ menuBook.sections bên dưới (mục nào có "image" thì hiện thành ô).
+     dishCount: số món hiện ở dải số liệu (theo menu: "hơn 50 món"). */
+  dishCount: "50+",
   menuIntro: "Gọi món tại bàn, không giới hạn số lần gọi. Đồ uống tính riêng.",
 
-  menu: [
-    {
-      id: "khai-vi",
-      name: "Khai vị & Salad",
-      nameEn: "Starters & salad",
-      note: "",
-      items: [
-        { name: "Salad rau củ sốt mayonnaise nhà làm", nameEn: "Garden salad, house mayonnaise", desc: "", image: "salad.jpg", tags: [] },
-        { name: "Kim chi", nameEn: "Kimchi", desc: "", image: "kimchi.jpg", tags: [] }
-      ]
-    },
-    {
-      id: "bo-nuong",
-      name: "Bò nướng",
-      nameEn: "Grilled beef",
-      note: "Bò Mỹ và bò Úc nhập khẩu",
-      items: [
-        { name: "Ba chỉ bò Mỹ", nameEn: "US beef belly", desc: "Thái mỏng, sốt Hana đặc biệt", image: "ba-chi-bo.jpg", tags: ["Bán chạy"] },
-        { name: "Bắp bò Úc", nameEn: "Australian beef shank", desc: "Mềm, ngọt thịt", image: "bap-bo.jpg", tags: [] },
-        { name: "Lõi vai bò Mỹ", nameEn: "US chuck eye", desc: "Ướp sốt tiêu đen", image: "loi-vai.jpg", tags: [] },
-        { name: "Sườn bò non sốt Galbi", nameEn: "Galbi short rib", desc: "Phong cách Hàn Quốc", image: "galbi.jpg", tags: ["Mới"] }
-      ]
-    },
-    {
-      id: "heo-ga",
-      name: "Heo & Gà",
-      nameEn: "Pork & chicken",
-      note: "",
-      items: [
-        { name: "Ba chỉ heo nướng", nameEn: "Grilled pork belly", desc: "", image: "ba-chi-heo.jpg", tags: [] },
-        { name: "Gà nướng lá dứa", nameEn: "Pandan grilled chicken", desc: "Thơm lá dứa, da giòn", image: "ga-la-dua.jpg", tags: ["Bán chạy"] },
-        { name: "Cánh gà sốt cay", nameEn: "Spicy chicken wings", desc: "", image: "canh-ga.jpg", tags: ["Cay"] },
-        { name: "Xiên nai nướng", nameEn: "Venison skewers", desc: "", image: "xien-nai.jpg", tags: [] }
-      ]
-    },
-    {
-      id: "hai-san",
-      name: "Hải sản",
-      nameEn: "Seafood",
-      note: "",
-      items: [
-        { name: "Tôm nướng", nameEn: "Grilled prawns", desc: "", image: "tom.jpg", tags: [] },
-        { name: "Mực nướng sa tế", nameEn: "Satay grilled squid", desc: "", image: "muc.jpg", tags: ["Cay"] },
-        { name: "Sò điệp nướng mỡ hành", nameEn: "Scallops with scallion oil", desc: "", image: "so-diep.jpg", tags: ["Bán chạy"] },
-        { name: "Nghêu hấp", nameEn: "Steamed clams", desc: "", image: "ngheu.jpg", tags: [] }
-      ]
-    },
-    {
-      id: "mon-au",
-      name: "Món Âu",
-      nameEn: "Western dishes",
-      note: "",
-      items: [
-        { name: "Pizza hải sản", nameEn: "Seafood pizza", desc: "", image: "pizza.jpg", tags: [] },
-        { name: "Mì Ý sốt bò bằm", nameEn: "Spaghetti bolognese", desc: "", image: "bolognese.jpg", tags: [] },
-        { name: "Khoai tây chiên", nameEn: "French fries", desc: "", image: "fries.jpg", tags: [] }
-      ]
-    },
-    {
-      id: "lau",
-      name: "Lẩu",
-      nameEn: "Hot pot",
-      note: "Chọn 1 loại nước lẩu cho mỗi bàn",
-      items: [
-        { name: "Lẩu Thái chua cay", nameEn: "Thai tom yum hot pot", desc: "", image: "lau-thai.jpg", tags: ["Cay"] },
-        { name: "Lẩu Miso Nhật", nameEn: "Japanese miso hot pot", desc: "Thanh ngọt, đậm vị", image: "lau-miso.jpg", tags: [] },
-        { name: "Rau & nấm nhúng lẩu", nameEn: "Vegetables & mushrooms", desc: "", image: "rau-nam.jpg", tags: [] }
-      ]
-    },
-    {
-      id: "trang-mieng",
-      name: "Tráng miệng",
-      nameEn: "Desserts",
-      note: "",
-      items: [
-        { name: "Kem", nameEn: "Ice cream", desc: "Nhiều vị", image: "kem.jpg", tags: [] },
-        { name: "Sữa chua", nameEn: "Yogurt", desc: "", image: "sua-chua.jpg", tags: [] },
-        { name: "Thạch trái cây", nameEn: "Fruit jelly", desc: "", image: "thach.jpg", tags: [] }
-      ]
-    },
-    {
-      id: "do-uong",
-      name: "Đồ uống",
-      nameEn: "Drinks",
-      note: "Đồ uống tính riêng, không nằm trong giá buffet",
-      items: [
-        { name: "Nước ngọt các loại", nameEn: "Soft drinks", desc: "", image: "nuoc-ngot.jpg", tags: [], price: 25000 },
-        { name: "Trà đào", nameEn: "Peach tea", desc: "", image: "tra-dao.jpg", tags: [], price: 35000 },
-        { name: "Bia Tiger", nameEn: "Tiger beer", desc: "Lon 330ml", image: "bia.jpg", tags: [], price: 30000 }
-      ]
-    }
-  ],
+  /* ---------- CUỐN MENU LẬT TRANG (menu.html) ----------
+     Các trang là ảnh xuất từ PDF menu (Canva) bằng lệnh `npm run build:menu`
+     → assets/menu-pages/ và data/menu-pages.js. Xem README.
+
+     sections: các mục hiện trên thanh chuyển nhanh phía trên cuốn menu.
+       id      : mã dùng trong link, vd menu.html#khai-vi
+       name    : tên hiển thị
+       page    : số trang trên web (bìa = 1; đã trừ các trang PDF bỏ đi bằng --bo trong package.json)
+       aliases : (tuỳ chọn) các mã cũ vẫn dẫn tới mục này
+       image   : (tuỳ chọn) ảnh trong assets/images/menu/ → mục hiện thành ô "Thực đơn" trên trang chủ
+                 (ảnh vuông ~720px, cắt từ ảnh gốc trong PDF menu)
+     Khi PDF thêm/bớt trang, chỉ cần sửa lại số "page" ở đây. */
+  menuBook: {
+    sections: [
+      { id: "gioi-thieu", name: "Giới thiệu", page: 3 },
+      { id: "chi-nhanh", name: "Chi nhánh", page: 6 },
+      { id: "bang-gia", name: "Bảng giá", page: 8 },
+      { id: "kid-combo", name: "Kid Combo", page: 10, image: "kid-combo.jpg" },
+      { id: "khai-vi", name: "Khai vị", page: 11, image: "khai-vi.jpg" },
+      { id: "salad", name: "Salad", page: 14, image: "salad.jpg" },
+      { id: "thit-bo", name: "Thịt bò", page: 16, image: "thit-bo.jpg", aliases: ["bo-nuong"] },
+      { id: "hai-san", name: "Hải sản", page: 20, image: "hai-san.jpg" },
+      { id: "cac-loai-thit", name: "Các loại thịt", page: 25, image: "cac-loai-thit.jpg", aliases: ["heo-ga"] },
+      { id: "pasta", name: "Pasta", page: 30, image: "pasta.jpg", aliases: ["mon-au"] },
+      { id: "pizza", name: "Pizza", page: 32, image: "pizza.jpg" },
+      { id: "lau", name: "Lẩu", page: 34, image: "lau.jpg" },
+      { id: "trang-mieng", name: "Tráng miệng", page: 36, image: "trang-mieng.jpg" },
+      { id: "do-uong", name: "Đồ uống", page: 38, image: "do-uong.jpg" }
+    ]
+  },
 
   /* ---------- TÌM CHI NHÁNH GẦN NHẤT ----------
      true  = hiện nút "Tìm chi nhánh gần tôi" (chỉ hỏi vị trí khi khách bấm)

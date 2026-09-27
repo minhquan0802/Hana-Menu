@@ -1,0 +1,14 @@
+{
+  "name": "hana-menu",
+  "private": true,
+  "description": "Website tĩnh Hana BBQ & Hot Pot Buffet",
+  "type": "module",
+  "scripts": {
+    "build:menu": "node tools/build-menu.mjs PDF/HANA-menu-2026.pdf.pdf --bo 20,25"
+  },
+  "devDependencies": {
+    "@hyzyla/pdfium": "^2.1.13",
+    "pdfjs-dist": "^4.10.38",
+    "sharp": "^0.35.4"
+  }
+}

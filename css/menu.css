@@ -1,225 +1,167 @@
 /* ============ Hana — cuốn menu lật trang (menu.html) ============
-   Dùng chung biến màu/font trong style.css.
-   Trang menu tối như bàn nướng buổi tối; bìa trước/sau màu cam logo.
-   Cỡ chữ trong trang tính theo chiều rộng trang (cqw) để cuốn menu co giãn mà vẫn giữ bố cục. */
+   Trang là ảnh xuất từ PDF menu in. Bố cục theo trang menu cũ của Hana (hana.hethongpos.com):
+   cuốn menu chiếm trọn chiều cao màn hình trên nền gỗ, mũi tên mảnh sát hai mép,
+   mọi điều hướng ẩn trong bảng trượt từ trái — mở bằng nút nhỏ ở góc trái.
+   Màu xanh navy + cam và font Montserrat / Open Sans lấy đúng từ PDF menu. */
+:root {
+  --menu-navy: #012753;
+  --menu-orange: #F08020;
+  --font-menu: "Montserrat", system-ui, sans-serif;
+}
 
 .visually-hidden {
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
+/* trang menu không cuộn: lăn chuột = lật trang (js/menu-book.js) */
+html:has(> body.menu-page) { height: 100%; overflow: hidden; overscroll-behavior: none; }
 .menu-page {
+  height: 100%;
   min-height: 100vh;
-  background: radial-gradient(ellipse 90% 70% at 50% 40%, #3A2519 0%, #1A100B 70%) fixed, #1A100B;
-  color: var(--on-char);
-}
-
-/* ---------- chuyển nhanh danh mục ---------- */
-.book-jump { padding-top: 12px; }
-.tabs-dark { border-bottom-color: var(--char-line); }
-.tabs-dark .tab { color: var(--on-char-soft); }
-.tabs-dark .tab:hover { color: var(--paper); }
-.tabs-dark .tab[aria-current="true"] { color: var(--paper); border-bottom-color: var(--fire); }
-.book-jump :focus-visible, .book-controls :focus-visible, .book :focus-visible { outline-color: var(--butter); }
-
-/* ---------- sân khấu ---------- */
-.book-wrap {
-  width: min(1180px, calc(100% - 32px), calc((100svh - 300px) * 1.5));
-  margin: 24px auto 0;
-}
-.book { margin: 0 auto; font-family: var(--font-body); }   /* trong cuốn menu giữ font riêng */
-
-.book-controls { display: flex; align-items: center; justify-content: center; gap: 20px; margin-top: 20px; }
-.book-btn {
-  display: grid; place-items: center;
-  width: 48px; height: 48px;
-  border: 2px solid var(--char-line); border-radius: 50%;
-  background: transparent; color: var(--on-char);
-  cursor: pointer;
-  transition: border-color .15s, color .15s;
-}
-.book-btn:hover:not(:disabled) { border-color: var(--butter); color: var(--butter); }
-.book-btn:disabled { opacity: .3; cursor: default; }
-.book-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.book-counter { min-width: 150px; text-align: center; font-size: 15px; color: var(--on-char-soft); }
-.book-hint { margin: 8px 0 32px; text-align: center; font-size: 13px; color: #8A7666; }
-.book-hint a { color: var(--on-char-soft); }
-
-/* ---------- trang ---------- */
-.page {
-  container-type: size;
-  background: radial-gradient(130% 90% at 25% 0%, #34221A 0%, #1F130E 72%);
-  color: var(--on-char);
   overflow: hidden;
+  overscroll-behavior: none;
+  background: #C9B28C url("../assets/images/site/menu-bg-go.jpg") center / cover fixed;
+  font-family: var(--font-menu);
 }
-.page-inner {
-  position: relative;
+
+/* ---------- cuốn menu: trọn chiều cao màn hình (kích thước do js/flipbook.js tính) ---------- */
+.book-stage { position: relative; display: grid; place-items: center; min-height: 100vh; min-height: 100svh; }
+.fb { position: relative; margin: 0 auto; user-select: none; -webkit-user-select: none; }
+.fb-stage {
+  position: absolute; inset: 0;
+  perspective: 2600px;
+  transition: transform .45s cubic-bezier(.2, .7, .3, 1);   /* bìa trước/sau tự căn giữa */
+  cursor: grab;
+  touch-action: none;
+}
+.fb-stage.is-dragging { cursor: grabbing; }
+.fb.is-single .fb-stage { overflow: hidden; }
+
+/* nền + bóng đổ dưới trang đang mở */
+.fb-under { position: absolute; top: 0; bottom: 0; width: 50%; background: var(--menu-navy); box-shadow: 0 6px 16px rgba(40, 25, 5, .28); }
+.fb-under-l { left: 0; }
+.fb-under-r { right: 0; }
+.fb.is-single .fb-under { width: 100%; }
+
+.fb-leaf { position: absolute; top: 0; height: 100%; transform-origin: left center; transform-style: preserve-3d; will-change: transform; }
+.fb-face {
+  position: absolute; inset: 0; overflow: hidden;
+  background: var(--menu-navy);
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.fb-back { transform: rotateY(180deg); }
+.fb-face img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-user-drag: none; }
+
+/* tờ đang bay: tối dần khi nghiêng + bóng đổ theo độ nhấc (--lift = 0…1) */
+.fb-shade { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; }
+.fb-front .fb-shade { background: linear-gradient(to right, rgba(0, 0, 0, .55), rgba(0, 0, 0, .18) 45%, rgba(0, 0, 0, .08)); }
+.fb-back .fb-shade { background: linear-gradient(to left, rgba(0, 0, 0, .55), rgba(0, 0, 0, .18) 45%, rgba(0, 0, 0, .08)); }
+.fb-leaf.is-moving .fb-face { box-shadow: 0 0 calc(var(--lift) * 36px) rgba(0, 0, 0, calc(var(--lift) * .4)); }
+
+/* Bóng gáy sách như menu cũ (đo từ ảnh chụp hana.hethongpos.com):
+   trang trái — vệt sáng rồi tối dần vào nếp gáy (~20% bề rộng) + mép ngoài sáng nhẹ;
+   trang phải — tối ở nếp gáy rồi một vệt sáng mờ (~14%). Bìa cứng không có bóng. */
+.fb-face::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.fb-left:not(.fb-hard)::after {
+  background:
+    linear-gradient(to left,
+      rgba(0, 0, 0, .22) 0%, rgba(0, 0, 0, .1) 4%, rgba(0, 0, 0, 0) 7%,
+      rgba(255, 255, 255, .06) 11%, rgba(255, 255, 255, .05) 15%, rgba(255, 255, 255, 0) 21%),
+    linear-gradient(to right, rgba(255, 255, 255, .025) 0%, rgba(255, 255, 255, 0) 45%);
+}
+.fb-right:not(.fb-hard)::after {
+  background: linear-gradient(to right,
+    rgba(0, 0, 0, .2) 0%, rgba(0, 0, 0, .06) 3%, rgba(0, 0, 0, 0) 5%,
+    rgba(255, 255, 255, .015) 7%, rgba(255, 255, 255, .015) 10%, rgba(255, 255, 255, 0) 14%);
+}
+/* điện thoại (từng trang): chỉ một dải tối mảnh ở mép gáy bên trái, như menu cũ */
+.fb-single:not(.fb-hard)::after {
+  background: linear-gradient(to right, rgba(0, 0, 0, .25) 0%, rgba(0, 0, 0, .08) 3%, rgba(0, 0, 0, 0) 7%);
+}
+
+.book-arrow {
+  position: fixed; top: 50%; z-index: 5;
+  display: grid; place-items: center;
+  width: 48px; height: 96px; margin-top: -48px;
+  border: 0; background: transparent; color: #fff;
+  cursor: pointer;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .45));
+}
+.book-arrow svg { width: 22px; height: 44px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.book-arrow:hover { color: var(--menu-orange); }
+.book-arrow:disabled { opacity: .2; cursor: default; color: #fff; }
+.book-arrow-prev { left: 6px; }
+.book-arrow-next { right: 6px; }
+
+/* ---------- nút mở bảng điều hướng ---------- */
+.panel-toggle {
+  position: fixed; top: 12px; left: 12px; z-index: 20;
+  display: grid; place-items: center;
+  width: 40px; height: 40px;
+  border: 0; border-radius: 50%;
+  background: rgba(1, 39, 83, .85); color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+  cursor: pointer;
+  transition: background-color .15s;
+}
+.panel-toggle:hover { background: var(--menu-navy); }
+.panel-toggle svg, .panel-close svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+/* ---------- bảng điều hướng ---------- */
+.menu-panel {
+  position: fixed; top: 0; bottom: 0; left: 0; z-index: 30;
   display: flex; flex-direction: column;
-  width: 100%; height: 100%;
-  padding: 8cqw 8cqw 5cqw;
+  width: min(320px, 86vw);
+  padding: 14px 20px 24px;
+  overflow-y: auto;
+  background: var(--menu-navy); color: #fff;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, .35);
+  transform: translateX(-100%);
+  visibility: hidden;          /* ẩn cả với phím Tab / trình đọc màn hình khi đóng */
+  transition: transform .25s ease, visibility .25s;
 }
-/* bóng gáy sách */
-.p-left .page-inner::after, .p-right .page-inner::after {
-  content: ""; position: absolute; top: 0; bottom: 0; width: 10cqw; pointer-events: none; z-index: 3;
-}
-.p-left .page-inner::after { right: 0; background: linear-gradient(to left, rgba(0, 0, 0, .45), transparent); }
-.p-right .page-inner::after { left: 0; background: linear-gradient(to right, rgba(0, 0, 0, .45), transparent); }
+.menu-panel.is-open { transform: none; visibility: visible; }
+.panel-backdrop { position: fixed; inset: 0; z-index: 25; background: rgba(0, 0, 0, .35); }
+.panel-backdrop[hidden] { display: none; }
 
-.pg-foot {
-  position: relative; z-index: 2;
-  display: flex; justify-content: space-between; align-items: baseline;
-  margin-top: auto; padding-top: 3cqw;
-  font-size: 2.6cqw; color: var(--on-char-soft);
-}
-.pg-foot span:first-child { font-family: var(--font-display); font-size: 3.4cqw; color: var(--fire); }
-.p-right .pg-foot { flex-direction: row-reverse; }
+.panel-head { display: flex; align-items: center; justify-content: space-between; }
+.panel-logo img { display: block; width: 132px; height: auto; padding: 6px 10px; border-radius: 8px; background: #fff; }
+.panel-close { display: grid; place-items: center; width: 40px; height: 40px; border: 0; background: transparent; color: #fff; cursor: pointer; }
 
-.pg-title { font-size: 8.4cqw; color: var(--paper); margin-bottom: 4cqw; }
+.panel-site { display: flex; flex-direction: column; margin-top: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, .15); }
+.panel-site a { padding: 7px 0; color: #fff; font-size: 14px; font-weight: 500; text-decoration: none; }
+.panel-site a:hover { color: var(--menu-orange); }
 
-/* ---------- bìa trước / sau ---------- */
-.pg-cover, .pg-back { background: var(--fire); color: var(--ink); }
-.pg-cover .page-inner { align-items: center; justify-content: center; text-align: center; }
-.cover-plate {
-  width: 62cqw; aspect-ratio: 1;
-  border-radius: 50%;
-  border: 1.6cqw solid var(--paper);
-  background: var(--paper);
-  overflow: hidden;
-  box-shadow: 0 4cqw 8cqw rgba(42, 27, 20, .35);
-}
-.cover-plate img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.12); }
-.cover-title { margin-top: 8cqw; font-family: var(--font-display); font-size: 18cqw; line-height: 1; }
-.cover-sub { margin-top: 2cqw; font-size: 3.6cqw; font-weight: 500; }
-
-.pg-back .page-inner { justify-content: center; }
-.back-mark { font-family: var(--font-display); font-size: 16cqw; line-height: 1; }
-.back-label { margin-top: 8cqw; font-size: 3.2cqw; }
-.back-phone { font-family: var(--font-display); font-size: 9cqw; line-height: 1.1; }
-.back-hours { margin-top: 1.5cqw; font-size: 3.2cqw; }
-.back-branches { list-style: none; margin: 8cqw 0 0; padding: 5cqw 0 0; border-top: .4cqw solid rgba(35, 25, 19, .35); }
-.back-branches li + li { margin-top: 3cqw; }
-.back-branches strong { display: block; font-size: 3.6cqw; font-weight: 600; }
-.back-branches span { display: block; font-size: 3cqw; }
-
-/* ---------- bảng giá ---------- */
-.price-list { list-style: none; margin: 0; padding: 0; }
-.price-list li {
-  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4cqw;
-  padding: 4cqw 0; border-bottom: 1px solid var(--char-line);
-}
-.price-list li:first-child { border-top: 1px solid var(--char-line); }
-.pl-name { font-family: var(--font-display); font-size: 5.4cqw; color: var(--paper); line-height: 1.15; }
-.pl-time { margin-top: .6cqw; font-size: 2.8cqw; color: var(--on-char-soft); }
-.pl-prices { margin: 0; }
-.pl-prices div { display: flex; align-items: baseline; justify-content: flex-end; gap: 2.4cqw; }
-.pl-prices dt { font-size: 2.7cqw; color: var(--on-char-soft); }
-.pl-prices dd { margin: 0; font-family: var(--font-display); font-size: 5.6cqw; line-height: 1.3; color: var(--butter); }
-.pl-notes { list-style: none; margin: 5cqw 0 0; padding: 0; font-size: 2.8cqw; color: var(--on-char-soft); }
-.pl-notes li + li { margin-top: 1cqw; }
-
-/* ---------- mục lục ---------- */
-.toc { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--char-line); }
-.toc button {
-  display: flex; align-items: baseline; gap: 2cqw;
-  width: 100%;
-  padding: 2.6cqw 0;
-  border: 0; border-bottom: 1px solid var(--char-line);
-  background: none; color: var(--on-char);
-  font: 400 3.8cqw var(--font-body);
-  text-align: left;
+.panel-label { margin: 16px 0 4px; font: italic 400 22px "Open Sans", sans-serif; color: var(--menu-orange); }
+.panel-toc { display: flex; flex-direction: column; }
+.panel-toc .tab {
+  padding: 8px 0 8px 12px;
+  border: 0; border-left: 3px solid transparent;
+  background: none; color: rgba(255, 255, 255, .8);
+  font: 400 15px var(--font-menu);
+  text-align: left; text-transform: none; letter-spacing: 0;
   cursor: pointer;
 }
-.toc button:hover { color: var(--butter); }
-.toc-leader { flex: 1; border-bottom: .4cqw dotted var(--char-line); transform: translateY(-1cqw); }
-.toc-num { font-family: var(--font-display); color: var(--butter); }
+.panel-toc .tab:hover { color: #fff; }
+.panel-toc .tab[aria-current="true"] { color: #fff; font-weight: 500; border-left-color: var(--menu-orange); }
 
-/* ---------- trang món ----------
-   Đĩa ảnh tràn ra mép ngoài trang (trang trái: mép trái, trang phải: mép phải),
-   cột chữ nằm phía gáy sách. Tiêu đề danh mục viết tay (Pacifico) như chữ "Hana" trên logo. */
-.pg-dish .page-inner { padding: 7cqw 7cqw 5cqw; }
-
-.dish-plates { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
-.dish-plate { position: absolute; margin: 0; aspect-ratio: 1; }
-.dish-plate img, .dish-plate .grill-art {
-  display: block; width: 100%; height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
+.panel-counter { margin-top: 14px; font-size: 13px; color: rgba(255, 255, 255, .65); }
+.panel-sound {
+  align-self: flex-start; margin-top: 10px; padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, .35); border-radius: 999px;
+  background: transparent; color: #fff; font: 400 13px var(--font-menu); cursor: pointer;
 }
-.dish-plate img {
-  border: 1.2cqw solid #3B2619;
-  box-shadow: 0 3cqw 8cqw rgba(0, 0, 0, .6);
+.panel-sound[aria-pressed="false"] { color: rgba(255, 255, 255, .6); border-style: dashed; }
+.menu-panel :focus-visible, .panel-toggle:focus-visible, .book-arrow:focus-visible { outline: 2px solid var(--menu-orange); outline-offset: 2px; }
+
+.data-error { margin: 24px auto; max-width: 600px; padding: 16px; background: #FBE1DC; }
+
+@media (max-width: 600px) {
+  /* điện thoại: từng trang một (js/flipbook.js), lật bằng vuốt */
+  .book-arrow { display: none; }
 }
-.dish-plate-no {
-  position: absolute; top: 8%;
-  display: grid; place-items: center;
-  width: 7.6cqw; height: 7.6cqw;
-  border-radius: 50%;
-  background: var(--fire); color: var(--ink);
-  font-family: var(--font-display); font-size: 3.4cqw; line-height: 1;
-  box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, .45);
-}
-/* 1 đĩa: lớn, giữa trang; 2 đĩa: trên và dưới, lệch nhau */
-.dish-plates-1 .dish-plate { width: 72cqw; top: 26cqw; }
-.dish-plates-2 .dish-plate:nth-child(1) { width: 60cqw; top: 3cqw; }
-.dish-plates-2 .dish-plate:nth-child(2) { width: 60cqw; top: 58cqw; }
-.p-left .dish-plates-1 .dish-plate { left: -36cqw; }
-.p-left .dish-plates-2 .dish-plate:nth-child(1) { left: -26cqw; }
-.p-left .dish-plates-2 .dish-plate:nth-child(2) { left: -32cqw; }
-.p-right .dish-plates-1 .dish-plate { right: -36cqw; }
-.p-right .dish-plates-2 .dish-plate:nth-child(1) { right: -26cqw; }
-.p-right .dish-plates-2 .dish-plate:nth-child(2) { right: -32cqw; }
-.p-left .dish-plate-no { right: 12%; }
-.p-right .dish-plate-no { left: 12%; }
 
-.dish-col {
-  position: relative; z-index: 2;
-  flex: 1; min-height: 0; overflow: hidden;
-  display: flex; flex-direction: column;
-  width: 56cqw;
-}
-.p-left .dish-col { margin-left: auto; }
-/* margin tự động: căn giữa theo chiều dọc khi còn chỗ, không bị cắt đầu khi dài */
-.dish-flow { margin-block: auto; }
-
-.cat-head { margin-top: 5cqw; font-family: "Pacifico", var(--font-display); font-weight: 400; font-size: 9.4cqw; line-height: 1.35; color: var(--butter); }
-.dish-flow > .cat-head:first-child { margin-top: 0; }
-.cat-cont { font-family: var(--font-body); font-size: 2.8cqw; color: var(--on-char-soft); }
-.cat-sub { margin-top: .4cqw; font-size: 2.8cqw; color: var(--on-char-soft); }
-.cat-sub span { display: block; }
-.cat-en { color: var(--on-char); }
-
-.dish { display: grid; grid-template-columns: 6.4cqw 1fr; gap: 2.6cqw; align-items: start; margin-top: 3cqw; }
-.dish-no {
-  display: grid; place-items: center;
-  width: 6.4cqw; height: 6.4cqw; margin-top: .2cqw;
-  border: .4cqw solid var(--fire); border-radius: 50%;
-  font-family: var(--font-display); font-size: 3cqw; line-height: 1; color: var(--butter);
-}
-.dish-text { min-width: 0; }
-.dish-name { font-family: var(--font-display); font-size: 4.6cqw; line-height: 1.15; color: var(--paper); }
-.dish-en { margin-top: .3cqw; font-size: 2.8cqw; color: var(--on-char-soft); }
-.dish-desc { margin-top: .3cqw; font-size: 2.9cqw; color: #D8C6B8; }
-.dish-tags { display: flex; flex-wrap: wrap; gap: 1.4cqw; margin-top: 1cqw; }
-.dish-price { margin-top: .6cqw; font-family: var(--font-display); font-size: 4.2cqw; color: var(--butter); }
-
-.bk-tag { padding: .3cqw 1.8cqw; border-radius: 1cqw; font-size: 2.5cqw; font-weight: 600; line-height: 1.6; }
-.bk-tag-hot { background: rgba(243, 112, 33, .22); color: #FFB27A; }
-.bk-tag-spicy { background: rgba(198, 47, 29, .32); color: #FF9E90; }
-.bk-tag-new { background: rgba(120, 190, 100, .2); color: #B8E3A6; }
-.bk-tag-plain { background: rgba(255, 255, 255, .1); color: var(--on-char); }
-
-.toc-note { margin-top: 4cqw; font-size: 2.8cqw; color: var(--on-char-soft); }
-
-/* ---------- trang đệm ---------- */
-.pg-filler .page-inner { align-items: center; justify-content: center; text-align: center; }
-.filler-mark { margin-top: auto; font-family: var(--font-display); font-size: 24cqw; line-height: 1; color: var(--fire); }
-.filler-text { margin-top: 4cqw; max-width: 62cqw; font-size: 3.6cqw; color: var(--on-char-soft); }
-.pg-filler .pg-foot { width: 100%; }
-
-/* ---------- dự phòng: không tải được thư viện lật trang ---------- */
-.book.is-static { display: grid; gap: 24px; max-width: 520px; }
-.book.is-static .page { position: relative; aspect-ratio: 3 / 4; border-radius: 6px; }
-
-@media (max-width: 900px) {
-  .book-wrap { width: min(100% - 24px, calc((100svh - 270px) * .75 * 2)); margin-top: 16px; }
+@media (prefers-reduced-motion: reduce) {
+  .menu-panel, .panel-toggle { transition: none; }
 }

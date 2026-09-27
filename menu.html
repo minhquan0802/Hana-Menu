@@ -4,79 +4,74 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Menu – Hana BBQ & Hot Pot Buffet</title>
-  <meta name="description" content="Menu Hana BBQ & Hot Pot Buffet: bò Mỹ & Úc, heo, gà, hải sản, lẩu Thái, lẩu Miso, món Âu, tráng miệng và đồ uống.">
-  <meta name="theme-color" content="#2A1B14">
+  <meta name="description" content="Menu Hana BBQ & Hot Pot Buffet 2026: bảng giá buffet, khai vị, salad, thịt bò, hải sản, các loại thịt, pasta, pizza, lẩu, tráng miệng và đồ uống.">
+  <meta name="theme-color" content="#012753">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Menu – Hana BBQ & Hot Pot Buffet">
   <meta property="og:description" content="Lật xem menu buffet lẩu nướng Hana.">
-  <meta property="og:image" content="assets/images/logo.png">
+  <meta property="og:image" content="assets/menu-pages/04.webp">
 
-  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&family=Pacifico&family=Paytone+One&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- Montserrat + Open Sans Italic: đúng font của menu in (PDF Canva) -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,700;1,400&family=Open+Sans:ital,wght@1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/menu.css">
 </head>
 <body class="menu-page">
 
-  <!-- ===== HEADER (giống trang chủ) ===== -->
-  <div class="topbar">
-    <div class="wrap topbar-inner">
-      <span>Mở cửa <span data-opening-hours></span></span>
-      <a data-hotline-link href="#">Hotline <span data-hotline-text></span></a>
-    </div>
-  </div>
-  <header class="site-header">
-    <div class="wrap header-inner">
-      <a href="index.html" class="brand-logo" aria-label="Hana BBQ & Hot Pot Buffet – trang chủ">
-        <img src="assets/images/logo.png" alt="Hana BBQ & Hot Pot Buffet" width="72" height="72">
+  <!-- Nút nhỏ góc trái: mở bảng điều hướng (mọi thanh điều hướng đều ẩn trong bảng này) -->
+  <button type="button" class="panel-toggle" data-panel-open aria-controls="menu-panel" aria-expanded="false" aria-label="Mở mục lục và điều hướng">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+
+  <aside class="menu-panel" id="menu-panel" aria-label="Mục lục và điều hướng">
+    <div class="panel-head">
+      <a href="index.html" class="panel-logo" aria-label="Hana BBQ & Hot Pot Buffet – trang chủ">
+        <img src="assets/images/logo-hana.png" alt="Hana BBQ & Hot Pot Buffet" width="286" height="148">
       </a>
-      <button class="nav-toggle" aria-label="Mở menu" aria-expanded="false" aria-controls="site-nav">
-        <span></span><span></span><span></span>
+      <button type="button" class="panel-close" data-panel-close aria-label="Đóng">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
       </button>
-      <nav class="site-nav" id="site-nav">
-        <a href="index.html">Trang chủ</a>
-        <a href="menu.html" aria-current="page">Thực đơn</a>
-        <a href="index.html#bang-gia">Bảng giá</a>
-        <a href="index.html#chi-nhanh">Chi nhánh</a>
-        <a data-hotline-link href="#">Đặt bàn</a>
-      </nav>
     </div>
-  </header>
+
+    <nav class="panel-site" aria-label="Trang web">
+      <a href="index.html">Trang chủ</a>
+      <a href="index.html#bang-gia">Bảng giá</a>
+      <a href="index.html#chi-nhanh">Chi nhánh</a>
+      <a data-hotline-link href="#">Đặt bàn <span data-hotline-text></span></a>
+    </nav>
+
+    <p class="panel-label">Mục lục</p>
+    <nav class="panel-toc" aria-label="Mục trong menu" data-book-jump></nav>
+
+    <p class="panel-counter" data-book-counter aria-live="polite"></p>
+    <button type="button" class="panel-sound" data-sound-toggle aria-pressed="true">Tiếng lật trang: bật</button>
+  </aside>
+  <div class="panel-backdrop" data-panel-close hidden></div>
 
   <main class="book-stage">
     <h1 class="visually-hidden">Menu Hana BBQ &amp; Hot Pot Buffet</h1>
 
-    <!-- Chuyển nhanh tới danh mục -->
-    <nav class="book-jump" aria-label="Danh mục menu">
-      <div class="wrap">
-        <div class="tabs tabs-dark" data-book-jump></div>
-      </div>
-    </nav>
-
-    <!-- Cuốn menu: các trang do js/menu-book.js tạo từ data/data.js -->
+    <!-- Cuốn menu: trang là ảnh xuất từ PDF (npm run build:menu) -->
+    <button type="button" class="book-arrow book-arrow-prev" data-book-prev aria-label="Trang trước">
+      <svg viewBox="0 0 24 48" aria-hidden="true"><path d="M20 4 4 24l16 20"/></svg>
+    </button>
     <div class="book-wrap">
       <div class="book" id="book" data-book></div>
     </div>
-
-    <div class="book-controls">
-      <button type="button" class="book-btn" data-book-prev aria-label="Trang trước">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
-      </button>
-      <p class="book-counter" data-book-counter aria-live="polite"></p>
-      <button type="button" class="book-btn" data-book-next aria-label="Trang sau">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-    <p class="book-hint">Kéo góc trang, vuốt hoặc dùng phím ← → để lật. Hình ảnh món ăn chỉ mang tính minh họa, <a href="credits.html">xem nguồn ảnh</a>.</p>
+    <button type="button" class="book-arrow book-arrow-next" data-book-next aria-label="Trang sau">
+      <svg viewBox="0 0 24 48" aria-hidden="true"><path d="M4 4l16 20L4 44"/></svg>
+    </button>
   </main>
 
-  <!-- data.js phải nạp TRƯỚC các file js khác -->
+  <!-- data.js và menu-pages.js phải nạp TRƯỚC các file js khác -->
   <script src="data/data.js"></script>
+  <script src="data/menu-pages.js"></script>
   <script src="js/common.js"></script>
-  <script src="js/vendor/page-flip.browser.js"></script>
+  <script src="js/flipbook.js"></script>
   <script src="js/menu-book.js"></script>
 </body>
 </html>

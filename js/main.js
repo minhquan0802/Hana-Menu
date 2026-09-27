@@ -123,14 +123,17 @@
   }
 
   /* ---------- con số: tính từ dữ liệu ---------- */
+  // Các nhóm món của menu (mục có ảnh trong data.menuBook.sections)
+  function dishSections() {
+    return ((data.menuBook || {}).sections || []).filter(function (s) { return s.image; });
+  }
+
   function renderStats() {
-    var cats = data.menu || [];
-    var dishes = cats.reduce(function (n, c) { return n + (c.items || []).length; }, 0);
     var branches = (data.branches || []).filter(function (b) { return b.active !== false; }).length;
     var stats = [
       [branches, "Chi nhánh"],
-      [dishes + "+", "Món ăn"],
-      [cats.length, "Nhóm món"],
+      [data.dishCount || "50+", "Món ăn"],
+      [dishSections().length, "Nhóm món"],
       ["3", "Phong cách Nhật – Hàn – Âu"]
     ];
     fill("[data-stats]", stats.map(function (s) {
@@ -140,15 +143,12 @@
 
   /* ---------- menu (trang chủ chỉ giới thiệu, menu đầy đủ ở menu.html) ---------- */
   function renderMenuTeaser() {
-    var cats = data.menu || [];
     fill("[data-menu-intro]", esc(data.menuIntro || ""));
-    fill("[data-menu-cats]", cats.map(function (c) {
-      var items = c.items || [];
-      var withImg = items.filter(function (it) { return it.image; })[0];
-      return '<li><a class="menu-card" href="menu.html#' + esc(c.id) + '">' +
-        (withImg ? '<img src="' + esc(U.MENU_IMG_DIR + withImg.image) + '" alt="" loading="lazy" width="720" height="720">' : "") +
-        '<span class="menu-card-name">' + esc(c.name) + "</span>" +
-        '<span class="menu-card-meta">' + (c.nameEn ? esc(c.nameEn) + ", " : "") + items.length + " món</span>" +
+    fill("[data-menu-cats]", dishSections().map(function (s) {
+      return '<li><a class="menu-card" href="menu.html#' + esc(s.id) + '">' +
+        '<img src="' + esc(U.MENU_IMG_DIR + s.image) + '" alt="' + esc(s.name) + '" loading="lazy" width="720" height="720">' +
+        '<span class="menu-card-name">' + esc(s.name) + "</span>" +
+        '<span class="menu-card-meta">Menu trang ' + s.page + "</span>" +
         "</a></li>";
     }).join(""));
   }
