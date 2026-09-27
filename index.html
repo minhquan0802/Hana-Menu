@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Hana BBQ & Hot Pot Buffet – Buffet lẩu nướng Nhật Hàn Âu</title>
-  <meta name="description" content="Hana BBQ & Hot Pot Buffet – buffet lẩu nướng gọi món tại bàn phong cách Nhật, Hàn, Âu. Bò Mỹ & Úc, hải sản, lẩu Thái, lẩu Miso. Hệ thống chi nhánh tại TP.HCM và Vũng Tàu.">
-  <meta name="theme-color" content="#F37021">
+  <meta name="description" content="Hana BBQ & Hot Pot Buffet – buffet lẩu nướng gọi món tại bàn phong cách Nhật, Hàn, Âu. Bò Mỹ & Úc, hải sản, lẩu Thái, lẩu Miso. Chi nhánh tại TP.HCM và Vũng Tàu.">
+  <meta name="theme-color" content="#2A1B14">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Hana BBQ & Hot Pot Buffet">
@@ -15,88 +15,132 @@
   <link rel="icon" type="image/png" href="assets/images/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&family=Paytone+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+  <a class="skip-link" href="#menu">Bỏ qua, xem menu</a>
+
   <!-- ===== HEADER ===== -->
-  <header class="site-header" id="top">
-    <div class="container header-inner">
-      <a href="#top" class="header-logo" aria-label="Hana Buffet – về đầu trang">
-        <img src="assets/images/logo.png" alt="Hana BBQ & Hot Pot Buffet" width="56" height="56">
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="#top" class="wordmark" aria-label="Hana BBQ & Hot Pot Buffet – về đầu trang">
+        <span class="wordmark-name">Hana</span>
+        <span class="wordmark-sub">BBQ &amp; Hot Pot Buffet</span>
       </a>
       <button class="nav-toggle" aria-label="Mở menu" aria-expanded="false" aria-controls="site-nav">
         <span></span><span></span><span></span>
       </button>
       <nav class="site-nav" id="site-nav">
-        <a href="#gioi-thieu">Giới thiệu</a>
         <a href="#bang-gia">Bảng giá</a>
         <a href="#menu">Menu</a>
+        <a href="#gioi-thieu">Về Hana</a>
         <a href="#chi-nhanh">Chi nhánh</a>
-        <a class="btn btn-primary btn-sm" data-hotline-link href="#">Đặt bàn</a>
+        <a class="btn btn-fire nav-call" data-hotline-link href="#">Gọi <span data-hotline-text></span></a>
       </nav>
     </div>
   </header>
 
   <main>
-    <!-- ===== HERO ===== -->
-    <section class="hero">
-      <div class="container hero-inner">
+    <!-- ===== HERO: vỉ nướng ===== -->
+    <section class="hero" id="top">
+      <div class="wrap hero-inner">
         <div class="hero-text">
-          <p class="eyebrow">Buffet lẩu nướng gọi món tại bàn</p>
-          <h1 data-brand-tagline>Buffet lẩu nướng phong cách Nhật – Hàn – Âu</h1>
-          <p class="hero-sub">Bò Mỹ &amp; Úc, hải sản, lẩu Thái, lẩu Miso, pizza, mì Ý… không giới hạn.</p>
-          <div class="hero-price" data-hero-price hidden></div>
-          <div class="hero-actions">
-            <a href="#menu" class="btn btn-primary">Xem menu</a>
-            <a href="#chi-nhanh" class="btn btn-outline">Tìm chi nhánh</a>
-          </div>
-          <p class="hero-meta">
-            <span>🕚 <span data-opening-hours></span></span>
-            <span>📞 <a data-hotline-link data-hotline-text href="#"></a></span>
-          </p>
-        </div>
-        <div class="hero-logo">
-          <img src="assets/images/logo.png" alt="" width="520" height="520">
-        </div>
-      </div>
-    </section>
+          <h1 class="hero-title" data-brand-headline>Nướng, nhúng, ăn thoả thích.</h1>
+          <p class="hero-sub" data-brand-tagline></p>
 
-    <!-- ===== GIỚI THIỆU ===== -->
-    <section class="section" id="gioi-thieu">
-      <div class="container about">
-        <div class="about-text">
-          <h2 class="section-title" data-about-title>Về Hana</h2>
-          <div data-about-paragraphs></div>
+          <div class="ticket" data-now-ticket></div>
+
+          <div class="hero-actions">
+            <a href="#menu" class="btn btn-fire">Xem menu</a>
+            <a href="#chi-nhanh" class="btn btn-ghost">Chọn chi nhánh</a>
+          </div>
         </div>
-        <ul class="highlights" data-about-highlights></ul>
+
+        <div class="grill" aria-hidden="true">
+          <svg class="grill-svg" viewBox="0 0 400 400">
+            <defs>
+              <radialGradient id="ember" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#FFCF5A"/>
+                <stop offset="45%" stop-color="#F37021"/>
+                <stop offset="80%" stop-color="#C62F1D"/>
+                <stop offset="100%" stop-color="#5A1A0C"/>
+              </radialGradient>
+              <clipPath id="grate-clip"><circle cx="200" cy="200" r="163"/></clipPath>
+            </defs>
+            <circle cx="200" cy="200" r="194" fill="#3B2619"/>
+            <circle cx="200" cy="200" r="182" fill="#140C08"/>
+            <circle class="embers" cx="200" cy="200" r="168" fill="url(#ember)"/>
+            <g clip-path="url(#grate-clip)" stroke="#20140E" stroke-width="7" stroke-linecap="round">
+              <line x1="46" y1="20" x2="46" y2="380"/><line x1="70" y1="20" x2="70" y2="380"/>
+              <line x1="94" y1="20" x2="94" y2="380"/><line x1="118" y1="20" x2="118" y2="380"/>
+              <line x1="142" y1="20" x2="142" y2="380"/><line x1="166" y1="20" x2="166" y2="380"/>
+              <line x1="190" y1="20" x2="190" y2="380"/><line x1="214" y1="20" x2="214" y2="380"/>
+              <line x1="238" y1="20" x2="238" y2="380"/><line x1="262" y1="20" x2="262" y2="380"/>
+              <line x1="286" y1="20" x2="286" y2="380"/><line x1="310" y1="20" x2="310" y2="380"/>
+              <line x1="334" y1="20" x2="334" y2="380"/><line x1="358" y1="20" x2="358" y2="380"/>
+            </g>
+            <circle cx="200" cy="200" r="166" fill="none" stroke="#20140E" stroke-width="9"/>
+            <circle cx="200" cy="200" r="190" fill="none" stroke="#52372A" stroke-width="3"/>
+          </svg>
+          <div class="plate">
+            <img src="assets/images/logo.png" alt="" width="600" height="600">
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ===== BẢNG GIÁ ===== -->
-    <section class="section section-alt" id="bang-gia">
-      <div class="container">
-        <h2 class="section-title center" data-pricing-title>Bảng giá buffet</h2>
-        <div class="price-grid" data-pricing-packages></div>
+    <section class="block" id="bang-gia">
+      <div class="wrap">
+        <h2 class="block-title" data-pricing-title>Bảng giá buffet</h2>
+        <div class="price-table-wrap">
+          <table class="price-table">
+            <thead>
+              <tr><th scope="col">Khung giờ</th><th scope="col">Người lớn</th><th scope="col">Trẻ em</th></tr>
+            </thead>
+            <tbody data-pricing-rows></tbody>
+          </table>
+        </div>
         <ul class="price-notes" data-pricing-notes></ul>
       </div>
     </section>
 
     <!-- ===== MENU ===== -->
-    <section class="section" id="menu">
-      <div class="container">
-        <h2 class="section-title center">Menu</h2>
-        <div class="menu-tabs" role="tablist" aria-label="Danh mục món" data-menu-tabs></div>
-        <div class="menu-body" data-menu-body></div>
+    <section class="block block-menu" id="menu">
+      <div class="wrap">
+        <h2 class="block-title">Menu</h2>
+        <p class="block-lead" data-menu-intro></p>
+      </div>
+      <div class="menu-tabs-bar">
+        <div class="wrap">
+          <div class="tabs" role="tablist" aria-label="Danh mục món" data-menu-tabs></div>
+        </div>
+      </div>
+      <div class="wrap" data-menu-body></div>
+    </section>
+
+    <!-- ===== VỀ HANA ===== -->
+    <section class="about" id="gioi-thieu">
+      <div class="wrap about-inner">
+        <div class="about-text">
+          <h2 class="block-title" data-about-title>Về Hana</h2>
+          <div data-about-paragraphs></div>
+        </div>
+        <ul class="facts" data-about-highlights></ul>
       </div>
     </section>
 
     <!-- ===== CHI NHÁNH ===== -->
-    <section class="section section-alt" id="chi-nhanh">
-      <div class="container">
-        <h2 class="section-title center">Hệ thống chi nhánh</h2>
-        <div class="chip-row" data-branch-filter></div>
+    <section class="block" id="chi-nhanh">
+      <div class="wrap">
+        <div class="branch-head">
+          <h2 class="block-title">Chi nhánh</h2>
+          <button type="button" class="btn btn-line near-btn" data-near-me hidden>Tìm chi nhánh gần tôi</button>
+        </div>
+        <div class="tabs" data-branch-filter></div>
+        <p class="near-status" data-near-status role="status" aria-live="polite" hidden></p>
         <div class="branch-grid" data-branch-list></div>
       </div>
     </section>
@@ -104,26 +148,26 @@
 
   <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-brand">
-        <img src="assets/images/logo.png" alt="Hana BBQ & Hot Pot Buffet" width="96" height="96" loading="lazy">
+    <div class="wrap footer-inner">
+      <div>
+        <p class="wordmark-name footer-mark">Hana</p>
         <p data-brand-name>Hana BBQ &amp; Hot Pot Buffet</p>
       </div>
       <div>
-        <h3>Liên hệ</h3>
-        <p>Hotline: <a data-hotline-link data-hotline-text href="#"></a></p>
-        <p>Giờ mở cửa: <span data-opening-hours></span></p>
+        <p class="footer-label">Đặt bàn</p>
+        <a class="footer-phone" data-hotline-link data-hotline-text href="#"></a>
+        <p>Mở cửa <span data-opening-hours></span></p>
       </div>
       <div>
-        <h3>Theo dõi Hana</h3>
+        <p class="footer-label">Theo dõi Hana</p>
         <div class="socials" data-socials></div>
       </div>
     </div>
-    <p class="copyright">© <span data-year></span> <span data-brand-name>Hana BBQ &amp; Hot Pot Buffet</span></p>
+    <p class="wrap copyright">© <span data-year></span> <span data-brand-name>Hana BBQ &amp; Hot Pot Buffet</span></p>
   </footer>
 
-  <!-- Nút gọi nổi (hiện trên điện thoại) -->
-  <a class="call-fab" data-hotline-link href="#" aria-label="Gọi đặt bàn">📞 Gọi đặt bàn</a>
+  <!-- Nút gọi nổi (chỉ hiện trên điện thoại) -->
+  <a class="call-bar" data-hotline-link href="#">Gọi đặt bàn <span data-hotline-text></span></a>
 
   <!-- data.js phải nạp TRƯỚC main.js -->
   <script src="data/data.js"></script>
