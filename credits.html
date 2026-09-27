@@ -8,30 +8,44 @@
   <link rel="icon" type="image/png" href="assets/images/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&family=Paytone+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
     .credits { list-style: none; margin: 32px 0 0; padding: 0; }
     .credits li { display: flex; gap: 16px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--smoke); }
     .credits img { width: 72px; height: 72px; flex: none; border-radius: 50%; object-fit: cover; }
     .credits p { font-size: 14px; color: var(--ink-soft); }
-    .credits .cr-dish { font-family: var(--font-display); font-size: 20px; color: var(--ink); }
+    .credits .cr-dish { font-size: 17px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--text); }
   </style>
 </head>
 <body>
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <span>Mở cửa <span data-opening-hours></span></span>
+      <a data-hotline-link href="#">Hotline <span data-hotline-text></span></a>
+    </div>
+  </div>
   <header class="site-header">
     <div class="wrap header-inner">
-      <a href="index.html" class="wordmark" aria-label="Hana BBQ & Hot Pot Buffet – trang chủ">
-        <span class="wordmark-name">Hana</span>
-        <span class="wordmark-sub">BBQ &amp; Hot Pot Buffet</span>
+      <a href="index.html" class="brand-logo" aria-label="Hana BBQ & Hot Pot Buffet – trang chủ">
+        <img src="assets/images/logo.png" alt="Hana BBQ & Hot Pot Buffet" width="72" height="72">
       </a>
-      <a class="btn btn-fire nav-call" href="menu.html">Về cuốn menu</a>
+      <button class="nav-toggle" aria-label="Mở menu" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" id="site-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="menu.html">Thực đơn</a>
+        <a href="index.html#bang-gia">Bảng giá</a>
+        <a href="index.html#chi-nhanh">Chi nhánh</a>
+        <a data-hotline-link href="#">Đặt bàn</a>
+      </nav>
     </div>
   </header>
   <main class="block">
     <div class="wrap">
       <h1 class="block-title">Nguồn ảnh minh họa</h1>
-      <p class="block-lead">Ảnh món ăn trong menu là ảnh minh họa có giấy phép mở (Creative Commons), không phải ảnh chụp món tại Hana. Cảm ơn các tác giả dưới đây.</p>
+      <p class="block-lead">Ảnh món ăn và ảnh trang trí trên web là ảnh minh họa có giấy phép mở (Creative Commons), không phải ảnh chụp món tại Hana. Cảm ơn các tác giả dưới đây.</p>
       <ul class="credits">
         <li>
           <img src="assets/images/menu/salad.jpg" alt="" width="72" height="72" loading="lazy">
@@ -215,8 +229,39 @@
             <p>“Beer Actor” — cogdogblog, <a href="https://www.flickr.com/photos/37996646802@N01/21127813750" target="_blank" rel="noopener">nguồn gốc</a>, giấy phép <a href="https://creativecommons.org/licenses/by/2.0/" target="_blank" rel="noopener">CC BY 2.0</a>. Đã cắt vuông và thu nhỏ.</p>
           </div>
         </li>
+        <li>
+          <img src="assets/images/site/hero-bo-nuong.jpg" alt="" width="72" height="72" loading="lazy">
+          <div>
+            <p class="cr-dish">Ảnh đầu trang: bò nướng</p>
+            <p>“Yakiniku beef” — Kanako.M, <a href="https://wordpress.org/photos/photo/961ed182c6/" target="_blank" rel="noopener">nguồn gốc</a>, giấy phép <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0 1.0</a>. Đã cắt và thu nhỏ.</p>
+          </div>
+        </li>
+        <li>
+          <img src="assets/images/site/hero-xien-nuong.jpg" alt="" width="72" height="72" loading="lazy">
+          <div>
+            <p class="cr-dish">Ảnh đầu trang: xiên nướng</p>
+            <p>“Meat grilling on the outdoor barbecue.” — Bhuwan Bdr. Rokaha, <a href="https://wordpress.org/photos/photo/31865b3805/" target="_blank" rel="noopener">nguồn gốc</a>, giấy phép <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0 1.0</a>. Đã cắt và thu nhỏ.</p>
+          </div>
+        </li>
+        <li>
+          <img src="assets/images/site/than-hong.jpg" alt="" width="72" height="72" loading="lazy">
+          <div>
+            <p class="cr-dish">Ảnh đầu trang, nền số liệu: than hồng</p>
+            <p>“Summertime. Original public domain image” — không rõ tác giả, <a href="https://www.rawpixel.com/image/3295586/free-photo-image-bbq-appliance-ash" target="_blank" rel="noopener">nguồn gốc</a>, giấy phép <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0 1.0</a>. Đã cắt và thu nhỏ.</p>
+          </div>
+        </li>
+        <li>
+          <img src="assets/images/site/ban-nuong.jpg" alt="" width="72" height="72" loading="lazy">
+          <div>
+            <p class="cr-dish">Ảnh bàn nướng, nền chân trang</p>
+            <p>“Korean BBQ, food image” — không rõ tác giả, <a href="https://www.rawpixel.com/image/6036219/photo-image-public-domain-food-free" target="_blank" rel="noopener">nguồn gốc</a>, giấy phép <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noopener">CC0 1.0</a>. Đã cắt và thu nhỏ.</p>
+          </div>
+        </li>
       </ul>
     </div>
   </main>
+  <script src="data/data.js"></script>
+  <script src="js/common.js"></script>
+  <script>HanaUtil.fillBrand(HANA_DATA.brand); HanaUtil.initNav();</script>
 </body>
 </html>

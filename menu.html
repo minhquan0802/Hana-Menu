@@ -15,28 +15,33 @@
   <link rel="icon" type="image/png" href="assets/images/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&family=Pacifico&family=Paytone+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&family=Pacifico&family=Paytone+One&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/menu.css">
 </head>
 <body class="menu-page">
 
   <!-- ===== HEADER (giống trang chủ) ===== -->
+  <div class="topbar">
+    <div class="wrap topbar-inner">
+      <span>Mở cửa <span data-opening-hours></span></span>
+      <a data-hotline-link href="#">Hotline <span data-hotline-text></span></a>
+    </div>
+  </div>
   <header class="site-header">
     <div class="wrap header-inner">
-      <a href="index.html" class="wordmark" aria-label="Hana BBQ & Hot Pot Buffet – trang chủ">
-        <span class="wordmark-name">Hana</span>
-        <span class="wordmark-sub">BBQ &amp; Hot Pot Buffet</span>
+      <a href="index.html" class="brand-logo" aria-label="Hana BBQ & Hot Pot Buffet – trang chủ">
+        <img src="assets/images/logo.png" alt="Hana BBQ & Hot Pot Buffet" width="72" height="72">
       </a>
       <button class="nav-toggle" aria-label="Mở menu" aria-expanded="false" aria-controls="site-nav">
         <span></span><span></span><span></span>
       </button>
       <nav class="site-nav" id="site-nav">
+        <a href="index.html">Trang chủ</a>
+        <a href="menu.html" aria-current="page">Thực đơn</a>
         <a href="index.html#bang-gia">Bảng giá</a>
-        <a href="menu.html" aria-current="page">Menu</a>
-        <a href="index.html#gioi-thieu">Về Hana</a>
         <a href="index.html#chi-nhanh">Chi nhánh</a>
-        <a class="btn btn-fire nav-call" data-hotline-link href="#">Gọi <span data-hotline-text></span></a>
+        <a data-hotline-link href="#">Đặt bàn</a>
       </nav>
     </div>
   </header>

@@ -55,10 +55,23 @@
     fill("[data-about-paragraphs]", (about.paragraphs || []).map(function (p) {
       return "<p>" + esc(p) + "</p>";
     }).join(""));
-    fill("[data-about-highlights]", (about.highlights || []).map(function (h) {
-      return '<li class="fact"><strong>' + esc(h.title) + "</strong><span>" + esc(h.text) + "</span></li>";
+    fill("[data-about-highlights]", (about.highlights || []).map(function (h, i) {
+      return '<li class="feature">' + FEATURE_ICONS[i % FEATURE_ICONS.length] +
+        "<strong>" + esc(h.title) + "</strong><span>" + esc(h.text) + "</span></li>";
     }).join(""));
   }
+
+  // Icon nét mảnh cho 4 điểm nổi bật (theo thứ tự trong data.about.highlights)
+  var FEATURE_ICONS = [
+    // thịt bò
+    '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M14 22c6-10 26-12 36-4 8 6 6 18-2 24-9 7-27 8-34 0-5-6-5-13 0-20z"/><path d="M22 28c5-4 14-5 20-1M20 36c7 3 17 3 24-2"/><circle cx="42" cy="22" r="3"/></svg>',
+    // lửa trên vỉ nướng
+    '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 8c3 8 10 11 10 20a10 10 0 0 1-20 0c0-5 3-7 4-11 2 4 4 5 6 5-2-5-2-9 0-14z"/><path d="M10 44h44M14 50h36M20 44v12M44 44v12"/></svg>',
+    // nồi lẩu
+    '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M10 30h44v6a18 18 0 0 1-18 18h-8a18 18 0 0 1-18-18z"/><path d="M6 30h52M26 22c-2-3 2-5 0-9M34 22c-2-3 2-5 0-9M42 22c-2-3 2-5 0-9"/></svg>',
+    // pizza
+    '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 10 8 52c16 6 32 6 48 0z"/><path d="M13 44c12 4 26 4 38 0"/><circle cx="30" cy="30" r="3"/><circle cx="38" cy="40" r="3"/><circle cx="25" cy="42" r="2.5"/></svg>'
+  ];
 
   /* ---------- bảng giá ---------- */
   // Trả về gói giá đang áp dụng theo giờ máy người xem (ngày lễ không nhận biết được).
@@ -83,44 +96,46 @@
 
     if (pricing.title) fill("[data-pricing-title]", esc(pricing.title));
 
-    fill("[data-pricing-rows]", packages.map(function (p) {
+    fill("[data-pricing-cards]", packages.map(function (p) {
       var isActive = p === active;
-      return '<tr' + (isActive ? ' class="is-now"' : "") + ">" +
-        '<th scope="row"><span class="pkg-name">' + esc(p.name) + "</span>" +
-          (isActive ? '<span class="now-pill">Đang áp dụng</span>' : "") +
-          '<span class="pkg-time">' + esc(p.schedule) + "</span></th>" +
-        '<td data-label="Người lớn">' + (p.adult != null ? money(p.adult) : "–") + "</td>" +
-        '<td data-label="Trẻ em">' + (p.child != null ? money(p.child) : "–") + "</td>" +
-        "</tr>";
+      return '<article class="price-card' + (isActive ? " is-now" : "") + '">' +
+        (isActive ? '<p class="now-label">Đang áp dụng</p>' : "") +
+        "<h3>" + esc(p.name) + "</h3>" +
+        '<p class="price-time">' + esc(p.schedule) + "</p>" +
+        '<dl class="price-rows">' +
+          (p.adult != null ? "<div><dt>Người lớn</dt><dd>" + money(p.adult) + "</dd></div>" : "") +
+          (p.child != null ? "<div><dt>Trẻ em</dt><dd>" + money(p.child) + "</dd></div>" : "") +
+        "</dl>" +
+        "</article>";
     }).join(""));
 
     fill("[data-pricing-notes]", (pricing.notes || []).map(function (n) {
       return "<li>" + esc(n) + "</li>";
     }).join(""));
 
-    renderTicket(packages, active);
+    // Dòng giá trên ảnh đầu trang: giá đang áp dụng, hoặc giá thấp nhất khi ngoài giờ
+    var lowest = packages.reduce(function (min, p) {
+      return p.adult != null && (min == null || p.adult < min) ? p.adult : min;
+    }, null);
+    fill("[data-hero-price]", active && active.adult != null
+      ? esc(active.name) + " hôm nay <strong>" + money(active.adult) + "</strong> / người lớn"
+      : lowest != null ? "Chỉ từ <strong>" + money(lowest) + "</strong> / người lớn" : "");
   }
 
-  // Phiếu giá ở đầu trang: giá đang áp dụng, hoặc giá thấp nhất khi ngoài giờ
-  function renderTicket(packages, active) {
-    var ticket = $("[data-now-ticket]");
-    if (!ticket || !packages.length) return;
-
-    if (active) {
-      ticket.innerHTML =
-        '<p class="ticket-head">Giá lúc này: ' + esc(active.name.toLowerCase()) + "</p>" +
-        '<div class="ticket-prices">' +
-          (active.adult != null ? "<div><span>Người lớn</span><strong>" + money(active.adult) + "</strong></div>" : "") +
-          (active.child != null ? "<div><span>Trẻ em</span><strong>" + money(active.child) + "</strong></div>" : "") +
-        "</div>";
-    } else {
-      var lowest = packages.reduce(function (min, p) {
-        return p.adult != null && (min == null || p.adult < min) ? p.adult : min;
-      }, null);
-      ticket.innerHTML =
-        '<p class="ticket-head">Mở cửa ' + esc(brand.openingHours) + "</p>" +
-        '<div class="ticket-prices"><div><span>Người lớn, từ</span><strong>' + money(lowest) + "</strong></div></div>";
-    }
+  /* ---------- con số: tính từ dữ liệu ---------- */
+  function renderStats() {
+    var cats = data.menu || [];
+    var dishes = cats.reduce(function (n, c) { return n + (c.items || []).length; }, 0);
+    var branches = (data.branches || []).filter(function (b) { return b.active !== false; }).length;
+    var stats = [
+      [branches, "Chi nhánh"],
+      [dishes + "+", "Món ăn"],
+      [cats.length, "Nhóm món"],
+      ["3", "Phong cách Nhật – Hàn – Âu"]
+    ];
+    fill("[data-stats]", stats.map(function (s) {
+      return '<li><strong>' + esc(s[0]) + "</strong><span>" + esc(s[1]) + "</span></li>";
+    }).join(""));
   }
 
   /* ---------- menu (trang chủ chỉ giới thiệu, menu đầy đủ ở menu.html) ---------- */
@@ -128,12 +143,54 @@
     var cats = data.menu || [];
     fill("[data-menu-intro]", esc(data.menuIntro || ""));
     fill("[data-menu-cats]", cats.map(function (c) {
-      var count = (c.items || []).length;
-      return '<li><a class="menu-cat-link" href="menu.html#' + esc(c.id) + '">' +
-        '<span class="menu-cat-name">' + esc(c.name) + "</span>" +
-        '<span class="menu-cat-meta">' + (c.nameEn ? esc(c.nameEn) + ", " : "") + count + " món</span>" +
+      var items = c.items || [];
+      var withImg = items.filter(function (it) { return it.image; })[0];
+      return '<li><a class="menu-card" href="menu.html#' + esc(c.id) + '">' +
+        (withImg ? '<img src="' + esc(U.MENU_IMG_DIR + withImg.image) + '" alt="" loading="lazy" width="720" height="720">' : "") +
+        '<span class="menu-card-name">' + esc(c.name) + "</span>" +
+        '<span class="menu-card-meta">' + (c.nameEn ? esc(c.nameEn) + ", " : "") + items.length + " món</span>" +
         "</a></li>";
     }).join(""));
+  }
+
+  /* ---------- ảnh trượt đầu trang ---------- */
+  function initSlider() {
+    var slides = $all("[data-slides] .slide");
+    var dots = $("[data-slide-dots]");
+    if (slides.length < 2 || !dots) return;
+
+    var current = 0;
+    var timer = null;
+    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    dots.innerHTML = slides.map(function (s, i) {
+      return '<button type="button" aria-label="Ảnh ' + (i + 1) + '"' + (i === 0 ? ' aria-current="true"' : "") + "></button>";
+    }).join("");
+    var dotBtns = $all("[data-slide-dots] button");
+
+    function show(i) {
+      current = (i + slides.length) % slides.length;
+      slides.forEach(function (s, k) { s.classList.toggle("is-active", k === current); });
+      dotBtns.forEach(function (d, k) { d.setAttribute("aria-current", String(k === current)); });
+    }
+    function start() {
+      if (reduceMotion) return;
+      stop();
+      timer = setInterval(function () { show(current + 1); }, 6000);
+    }
+    function stop() { if (timer) clearInterval(timer); timer = null; }
+
+    $("[data-slide-prev]").addEventListener("click", function () { show(current - 1); start(); });
+    $("[data-slide-next]").addEventListener("click", function () { show(current + 1); start(); });
+    dotBtns.forEach(function (d, k) { d.addEventListener("click", function () { show(k); start(); }); });
+
+    // Dừng tự chuyển khi khách đang rê chuột / thao tác bàn phím trong khu ảnh
+    var hero = $(".hero");
+    hero.addEventListener("mouseenter", stop);
+    hero.addEventListener("mouseleave", start);
+    hero.addEventListener("focusin", stop);
+    hero.addEventListener("focusout", start);
+    start();
   }
 
   /* ---------- chi nhánh ---------- */
@@ -294,6 +351,8 @@
   renderAbout();
   renderPricing();
   renderMenuTeaser();
+  renderStats();
+  initSlider();
   renderBranches();
   U.initNav();
 })();
