@@ -2,7 +2,7 @@
    Trang là ảnh xuất từ PDF menu in. Bố cục theo trang menu cũ của Hana (hana.hethongpos.com):
    cuốn menu chiếm trọn chiều cao màn hình trên nền gỗ, mũi tên mảnh sát hai mép,
    mọi điều hướng ẩn trong bảng trượt từ trái — mở bằng nút nhỏ ở góc trái.
-   Màu xanh navy + cam và font Montserrat / Open Sans lấy đúng từ PDF menu. */
+   Màu xanh navy + cam và font Montserrat lấy đúng từ PDF menu. */
 :root {
   --menu-navy: #012753;
   --menu-orange: #F08020;
@@ -133,7 +133,7 @@ html:has(> body.menu-page) { height: 100%; overflow: hidden; overscroll-behavior
 .panel-site a { padding: 7px 0; color: #fff; font-size: 14px; font-weight: 500; text-decoration: none; }
 .panel-site a:hover { color: var(--menu-orange); }
 
-.panel-label { margin: 16px 0 4px; font: italic 400 22px "Open Sans", sans-serif; color: var(--menu-orange); }
+.panel-label { margin: 16px 0 4px; font: 700 20px var(--font-menu); color: var(--menu-orange); }
 .panel-toc { display: flex; flex-direction: column; }
 .panel-toc .tab {
   padding: 8px 0 8px 12px;

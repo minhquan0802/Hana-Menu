@@ -99,8 +99,9 @@
     fill("[data-pricing-cards]", packages.map(function (p) {
       var isActive = p === active;
       return '<article class="price-card' + (isActive ? " is-now" : "") + '">' +
-        (isActive ? '<p class="now-label">Đang áp dụng</p>' : "") +
+        (p.group ? '<p class="price-group">' + esc(p.group) + "</p>" : "") +
         "<h3>" + esc(p.name) + "</h3>" +
+        (isActive ? '<p class="now-label">Đang áp dụng</p>' : "") +
         '<p class="price-time">' + esc(p.schedule) + "</p>" +
         '<dl class="price-rows">' +
           (p.adult != null ? "<div><dt>Người lớn</dt><dd>" + money(p.adult) + "</dd></div>" : "") +

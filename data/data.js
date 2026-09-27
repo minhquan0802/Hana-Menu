@@ -10,8 +10,7 @@
    - Giá ghi số nguyên, KHÔNG có dấu chấm: 236000 (web tự hiện 236.000₫)
    - Sửa xong, tải lại trang (F5) để xem.
 
-   (!) Số liệu hiện tại là DỮ LIỆU MẪU lấy từ các trang review (04/2025),
-       cần kiểm tra lại trước khi đưa lên web.
+   Giá lấy theo menu 2026 (PDF). Khi menu đổi giá, nhớ sửa cả ở đây.
    ===================================================================== */
 
 window.HANA_DATA = {
@@ -51,38 +50,50 @@ window.HANA_DATA = {
   /* ---------- BẢNG GIÁ BUFFET ---------- */
   pricing: {
     title: "Bảng giá buffet",
-    // Mỗi khung giá: tên, thời gian áp dụng, giá người lớn, giá trẻ em.
+    // Mỗi khung giá: nhóm ngày (group), tên, giờ áp dụng, giá người lớn, giá trẻ em.
     // "match" giúp web tự tô sáng khung giá đang áp dụng lúc khách xem:
     //   days: "weekday" (T2–T6) | "weekend" (T7, CN) — ngày lễ không tự nhận biết được
     //   from/to: giờ bắt đầu/kết thúc (0–24)
     // Không muốn tự tô sáng thì xóa dòng match.
+    // Theo trang "Bảng Giá" trong menu 2026 (PDF/HANA-menu-2026.pdf.pdf, trang 8).
     packages: [
       {
-        name: "Buffet trưa",
-        schedule: "Thứ 2 – Thứ 6, 11:00 – 15:00",
-        adult: 236000,
-        child: 136000,
+        group: "Ngày thường (T2 – T6)",
+        name: "Buổi trưa",
+        schedule: "11:00 – 15:00",
+        adult: 348000,
+        child: 156000,
         match: { days: "weekday", from: 11, to: 15 }
       },
       {
-        name: "Buffet tối",
-        schedule: "Thứ 2 – Thứ 6, 17:00 – 22:00",
-        adult: 276000,
-        child: 176000,
+        group: "Ngày thường (T2 – T6)",
+        name: "Buổi chiều",
+        schedule: "17:00 – 22:00",
+        adult: 378000,
+        child: 196000,
         match: { days: "weekday", from: 17, to: 22 }
       },
       {
-        name: "Cuối tuần & Lễ",
-        schedule: "Thứ 7, Chủ nhật và ngày lễ, cả ngày",
-        adult: 296000,
-        child: 196000,
-        match: { days: "weekend", from: 11, to: 22 }
+        group: "Cuối tuần & ngày lễ",
+        name: "Buổi trưa",
+        schedule: "11:00 – 15:00",
+        adult: 378000,
+        child: 158000,
+        match: { days: "weekend", from: 11, to: 15 }
+      },
+      {
+        group: "Cuối tuần & ngày lễ",
+        name: "Buổi chiều",
+        schedule: "17:00 – 22:00",
+        adult: 388000,
+        child: 198000,
+        match: { days: "weekend", from: 17, to: 22 }
       }
     ],
-    // Ghi chú hiển thị dưới bảng giá
+    // Ghi chú hiển thị dưới bảng giá (theo menu)
     notes: [
-      "Giá chưa bao gồm 10% VAT và đồ uống.",
-      "Giá trẻ em áp dụng theo chiều cao — vui lòng hỏi nhân viên tại quầy."
+      "Giá buffet chưa bao gồm thuế VAT và đồ uống.",
+      "Trẻ em: cao 1,0m – 1,3m. Miễn phí cho trẻ em cao dưới 1,0m."
     ]
   },
 

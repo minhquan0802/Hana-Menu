@@ -69,8 +69,9 @@ Sửa xong lưu file và tải lại trang (F5). Nếu trang hiện dòng báo l
 
 ## Thiết kế
 
-- Trang chủ: phong cách tham khảo kingbbq.vn — header trắng, chữ in hoa Roboto, chữ viết tay Kristi,
+- Trang chủ: phong cách tham khảo kingbbq.vn — header trắng, menu chữ in hoa,
   xám `#D3D3D3` / nâu vàng `#C7AC92`. Biến màu/font ở đầu `css/style.css`.
 - Cuốn menu: theo trang menu cũ của Hana — nền gỗ, xanh navy `#012753`, cam `#F08020`,
-  font Montserrat / Open Sans (đúng font trong PDF menu).
+  font Montserrat (đúng font trong PDF menu).
+- Cả web dùng một font duy nhất: **Montserrat**.
 - Git tag `v1.0-giao-dien-1`: giao diện cũ "quán nướng lúc tối", để quay lại khi cần.
