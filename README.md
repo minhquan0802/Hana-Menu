@@ -7,6 +7,7 @@ Web tĩnh (HTML/CSS/JS thuần, không cần cài đặt hay build). Mở `index
 ```
 index.html            Trang chủ (giới thiệu, bảng giá, danh mục menu, chi nhánh)
 menu.html             Cuốn menu lật trang
+credits.html          Nguồn và giấy phép ảnh minh họa
 data/data.js          ★ DỮ LIỆU — giá, menu, chi nhánh, hotline, giới thiệu
 css/style.css         Giao diện chung (màu, font, header/footer, trang chủ)
 css/menu.css          Giao diện cuốn menu
@@ -28,8 +29,9 @@ Chỉ sửa **`data/data.js`** — mỗi phần đều có chú thích tiếng V
 - **Thêm ảnh món:** bỏ ảnh vào `assets/images/menu/` (vd `ba-chi-bo.jpg`), ghi `image: "ba-chi-bo.jpg"`.
   Nên dùng ảnh vuông, ~600×600px, dưới 200KB.
 - **Tên tiếng Anh:** `nameEn` cho món và danh mục (hiện nhỏ dưới tên tiếng Việt trong cuốn menu).
-- **Ảnh bìa danh mục** (trang trái của cuốn menu): bỏ ảnh dọc 3:4 vào `assets/images/menu/`, ghi vào `cover`.
-  Chưa có ảnh thì trang bìa dùng hình vỉ nướng.
+- **Ảnh món:** ảnh hiện tại là **ảnh minh họa giấy phép mở** (Flickr/Wikimedia/rawpixel, CC BY 2.0 / CC0), nguồn ghi ở `credits.html`.
+  Khi có ảnh chụp món thật của Hana: chép đè file cùng tên trong `assets/images/menu/` (ảnh vuông ~720px),
+  rồi xóa dòng tương ứng trong `credits.html`.
 - **Thêm danh mục:** chép cả khối `{ id: ..., name: ..., items: [...] }`; `id` viết không dấu, không khoảng trắng.
 - **Ẩn chi nhánh:** đổi `active: true` thành `active: false`.
 - **Tọa độ chi nhánh** (dùng cho nút "Tìm chi nhánh gần tôi"): trên Google Maps bấm chuột phải đúng vị trí
@@ -41,7 +43,10 @@ Sửa xong lưu file và tải lại trang (F5). Nếu trang hiện dòng báo l
 
 ## Cuốn menu (menu.html)
 
-- Thứ tự: bìa → bảng giá | mục lục → mỗi danh mục một cặp trang (bìa danh mục | các món) → bìa sau.
+- Thứ tự: bìa → bảng giá | mục lục → các trang món → bìa sau.
+- Trang món: theo thứ tự danh mục trong `data.js`, món đánh số liên tục. Mỗi danh mục nằm trọn một trang
+  (không vừa phần còn lại thì sang trang mới); chỉ danh mục dài hơn cả một trang mới bị tách, kèm chữ "(tiếp)".
+  Mỗi trang in đĩa ảnh của tối đa 2 món đầu tiên có ảnh, tràn ra mép ngoài trang; số trên đĩa khớp số món.
 - Tự chia trang: món được xếp thử vào trang, hết chỗ thì sang trang mới — không cần tự đếm món.
 - Link thẳng tới danh mục: `menu.html#lau`, `menu.html#do-uong`, `menu.html#bang-gia`… (dùng `id` của danh mục) — tiện làm mã QR đặt trên bàn.
 - Lật bằng kéo góc trang, vuốt, nút ‹ ›, phím ← →; trên điện thoại hiện từng trang.

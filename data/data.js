@@ -96,9 +96,6 @@ window.HANA_DATA = {
        name   : tên hiển thị
        nameEn : tên tiếng Anh, hiện nhỏ bên dưới (có thể để "")
        note   : ghi chú nhỏ cho cả danh mục (có thể để "")
-       cover  : ảnh lớn cho trang bìa danh mục trong cuốn menu, bỏ file vào
-                assets/images/menu/ (vd "cover-lau.jpg"). Để "" sẽ dùng bìa chữ.
-                Nên dùng ảnh dọc, tỉ lệ 3:4, khoảng 1200×1600px, dưới 400KB.
        items  : danh sách món
 
      Mỗi món (item) gồm:
@@ -106,14 +103,15 @@ window.HANA_DATA = {
        nameEn : tên tiếng Anh (có thể để "")
        desc   : mô tả ngắn (có thể để "")
        image  : ảnh món trong assets/images/menu/ (có thể để "").
-                Ảnh vuông ~600×600px; ảnh chụp từ trên xuống, nền tối/trong suốt
-                (PNG) sẽ đẹp nhất khi đặt trên trang menu tối.
+                Ảnh vuông ~720×720px, món nằm giữa ảnh (web cắt thành đĩa tròn).
+                Ảnh hiện tại là ảnh minh họa giấy phép mở, nguồn ghi ở credits.html;
+                khi có ảnh chụp món thật của Hana thì chép đè file cùng tên.
        tags   : nhãn, vd ["Bán chạy"], ["Cay"], ["Mới"] — để [] nếu không có
        price  : CHỈ ghi khi món tính tiền riêng (đồ uống, món thêm).
                 Món nằm trong buffet thì bỏ trống hoặc xóa dòng price.
 
      Thứ tự danh mục ở đây = thứ tự trong cuốn menu và trên trang chủ.
-     Cuốn menu tự chia trang: mỗi trang tối đa 5 món, danh mục dài sẽ sang trang tiếp.
+     Cuốn menu tự chia trang theo độ dài; mỗi trang in ảnh của tối đa 2 món đầu tiên có ảnh.
   */
   menuIntro: "Gọi món tại bàn, không giới hạn số lần gọi. Đồ uống tính riêng.",
 
@@ -123,10 +121,9 @@ window.HANA_DATA = {
       name: "Khai vị & Salad",
       nameEn: "Starters & salad",
       note: "",
-      cover: "",
       items: [
-        { name: "Salad rau củ sốt mayonnaise nhà làm", nameEn: "Garden salad, house mayonnaise", desc: "", image: "", tags: [] },
-        { name: "Kim chi", nameEn: "Kimchi", desc: "", image: "", tags: [] }
+        { name: "Salad rau củ sốt mayonnaise nhà làm", nameEn: "Garden salad, house mayonnaise", desc: "", image: "salad.jpg", tags: [] },
+        { name: "Kim chi", nameEn: "Kimchi", desc: "", image: "kimchi.jpg", tags: [] }
       ]
     },
     {
@@ -134,12 +131,11 @@ window.HANA_DATA = {
       name: "Bò nướng",
       nameEn: "Grilled beef",
       note: "Bò Mỹ và bò Úc nhập khẩu",
-      cover: "",
       items: [
-        { name: "Ba chỉ bò Mỹ", nameEn: "US beef belly", desc: "Thái mỏng, sốt Hana đặc biệt", image: "", tags: ["Bán chạy"] },
-        { name: "Bắp bò Úc", nameEn: "Australian beef shank", desc: "Mềm, ngọt thịt", image: "", tags: [] },
-        { name: "Lõi vai bò Mỹ", nameEn: "US chuck eye", desc: "Ướp sốt tiêu đen", image: "", tags: [] },
-        { name: "Sườn bò non sốt Galbi", nameEn: "Galbi short rib", desc: "Phong cách Hàn Quốc", image: "", tags: ["Mới"] }
+        { name: "Ba chỉ bò Mỹ", nameEn: "US beef belly", desc: "Thái mỏng, sốt Hana đặc biệt", image: "ba-chi-bo.jpg", tags: ["Bán chạy"] },
+        { name: "Bắp bò Úc", nameEn: "Australian beef shank", desc: "Mềm, ngọt thịt", image: "bap-bo.jpg", tags: [] },
+        { name: "Lõi vai bò Mỹ", nameEn: "US chuck eye", desc: "Ướp sốt tiêu đen", image: "loi-vai.jpg", tags: [] },
+        { name: "Sườn bò non sốt Galbi", nameEn: "Galbi short rib", desc: "Phong cách Hàn Quốc", image: "galbi.jpg", tags: ["Mới"] }
       ]
     },
     {
@@ -147,12 +143,11 @@ window.HANA_DATA = {
       name: "Heo & Gà",
       nameEn: "Pork & chicken",
       note: "",
-      cover: "",
       items: [
-        { name: "Ba chỉ heo nướng", nameEn: "Grilled pork belly", desc: "", image: "", tags: [] },
-        { name: "Gà nướng lá dứa", nameEn: "Pandan grilled chicken", desc: "Thơm lá dứa, da giòn", image: "", tags: ["Bán chạy"] },
-        { name: "Cánh gà sốt cay", nameEn: "Spicy chicken wings", desc: "", image: "", tags: ["Cay"] },
-        { name: "Xiên nai nướng", nameEn: "Venison skewers", desc: "", image: "", tags: [] }
+        { name: "Ba chỉ heo nướng", nameEn: "Grilled pork belly", desc: "", image: "ba-chi-heo.jpg", tags: [] },
+        { name: "Gà nướng lá dứa", nameEn: "Pandan grilled chicken", desc: "Thơm lá dứa, da giòn", image: "ga-la-dua.jpg", tags: ["Bán chạy"] },
+        { name: "Cánh gà sốt cay", nameEn: "Spicy chicken wings", desc: "", image: "canh-ga.jpg", tags: ["Cay"] },
+        { name: "Xiên nai nướng", nameEn: "Venison skewers", desc: "", image: "xien-nai.jpg", tags: [] }
       ]
     },
     {
@@ -160,12 +155,11 @@ window.HANA_DATA = {
       name: "Hải sản",
       nameEn: "Seafood",
       note: "",
-      cover: "",
       items: [
-        { name: "Tôm nướng", nameEn: "Grilled prawns", desc: "", image: "", tags: [] },
-        { name: "Mực nướng sa tế", nameEn: "Satay grilled squid", desc: "", image: "", tags: ["Cay"] },
-        { name: "Sò điệp nướng mỡ hành", nameEn: "Scallops with scallion oil", desc: "", image: "", tags: ["Bán chạy"] },
-        { name: "Nghêu hấp", nameEn: "Steamed clams", desc: "", image: "", tags: [] }
+        { name: "Tôm nướng", nameEn: "Grilled prawns", desc: "", image: "tom.jpg", tags: [] },
+        { name: "Mực nướng sa tế", nameEn: "Satay grilled squid", desc: "", image: "muc.jpg", tags: ["Cay"] },
+        { name: "Sò điệp nướng mỡ hành", nameEn: "Scallops with scallion oil", desc: "", image: "so-diep.jpg", tags: ["Bán chạy"] },
+        { name: "Nghêu hấp", nameEn: "Steamed clams", desc: "", image: "ngheu.jpg", tags: [] }
       ]
     },
     {
@@ -173,11 +167,10 @@ window.HANA_DATA = {
       name: "Món Âu",
       nameEn: "Western dishes",
       note: "",
-      cover: "",
       items: [
-        { name: "Pizza hải sản", nameEn: "Seafood pizza", desc: "", image: "", tags: [] },
-        { name: "Mì Ý sốt bò bằm", nameEn: "Spaghetti bolognese", desc: "", image: "", tags: [] },
-        { name: "Khoai tây chiên", nameEn: "French fries", desc: "", image: "", tags: [] }
+        { name: "Pizza hải sản", nameEn: "Seafood pizza", desc: "", image: "pizza.jpg", tags: [] },
+        { name: "Mì Ý sốt bò bằm", nameEn: "Spaghetti bolognese", desc: "", image: "bolognese.jpg", tags: [] },
+        { name: "Khoai tây chiên", nameEn: "French fries", desc: "", image: "fries.jpg", tags: [] }
       ]
     },
     {
@@ -185,11 +178,10 @@ window.HANA_DATA = {
       name: "Lẩu",
       nameEn: "Hot pot",
       note: "Chọn 1 loại nước lẩu cho mỗi bàn",
-      cover: "",
       items: [
-        { name: "Lẩu Thái chua cay", nameEn: "Thai tom yum hot pot", desc: "", image: "", tags: ["Cay"] },
-        { name: "Lẩu Miso Nhật", nameEn: "Japanese miso hot pot", desc: "Thanh ngọt, đậm vị", image: "", tags: [] },
-        { name: "Rau & nấm nhúng lẩu", nameEn: "Vegetables & mushrooms", desc: "", image: "", tags: [] }
+        { name: "Lẩu Thái chua cay", nameEn: "Thai tom yum hot pot", desc: "", image: "lau-thai.jpg", tags: ["Cay"] },
+        { name: "Lẩu Miso Nhật", nameEn: "Japanese miso hot pot", desc: "Thanh ngọt, đậm vị", image: "lau-miso.jpg", tags: [] },
+        { name: "Rau & nấm nhúng lẩu", nameEn: "Vegetables & mushrooms", desc: "", image: "rau-nam.jpg", tags: [] }
       ]
     },
     {
@@ -197,11 +189,10 @@ window.HANA_DATA = {
       name: "Tráng miệng",
       nameEn: "Desserts",
       note: "",
-      cover: "",
       items: [
-        { name: "Kem", nameEn: "Ice cream", desc: "Nhiều vị", image: "", tags: [] },
-        { name: "Sữa chua", nameEn: "Yogurt", desc: "", image: "", tags: [] },
-        { name: "Thạch trái cây", nameEn: "Fruit jelly", desc: "", image: "", tags: [] }
+        { name: "Kem", nameEn: "Ice cream", desc: "Nhiều vị", image: "kem.jpg", tags: [] },
+        { name: "Sữa chua", nameEn: "Yogurt", desc: "", image: "sua-chua.jpg", tags: [] },
+        { name: "Thạch trái cây", nameEn: "Fruit jelly", desc: "", image: "thach.jpg", tags: [] }
       ]
     },
     {
@@ -209,11 +200,10 @@ window.HANA_DATA = {
       name: "Đồ uống",
       nameEn: "Drinks",
       note: "Đồ uống tính riêng, không nằm trong giá buffet",
-      cover: "",
       items: [
-        { name: "Nước ngọt các loại", nameEn: "Soft drinks", desc: "", image: "", tags: [], price: 25000 },
-        { name: "Trà đào", nameEn: "Peach tea", desc: "", image: "", tags: [], price: 35000 },
-        { name: "Bia Tiger", nameEn: "Tiger beer", desc: "Lon 330ml", image: "", tags: [], price: 30000 }
+        { name: "Nước ngọt các loại", nameEn: "Soft drinks", desc: "", image: "nuoc-ngot.jpg", tags: [], price: 25000 },
+        { name: "Trà đào", nameEn: "Peach tea", desc: "", image: "tra-dao.jpg", tags: [], price: 35000 },
+        { name: "Bia Tiger", nameEn: "Tiger beer", desc: "Lon 330ml", image: "bia.jpg", tags: [], price: 30000 }
       ]
     }
   ],

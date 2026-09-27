@@ -43,6 +43,7 @@
 .book-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .book-counter { min-width: 150px; text-align: center; font-size: 15px; color: var(--on-char-soft); }
 .book-hint { margin: 8px 0 32px; text-align: center; font-size: 13px; color: #8A7666; }
+.book-hint a { color: var(--on-char-soft); }
 
 /* ---------- trang ---------- */
 .page {
@@ -132,66 +133,82 @@
 .toc-leader { flex: 1; border-bottom: .4cqw dotted var(--char-line); transform: translateY(-1cqw); }
 .toc-num { font-family: var(--font-display); color: var(--butter); }
 
-/* ---------- bìa danh mục ---------- */
-.catcover-art { position: absolute; top: -34cqw; right: -42cqw; width: 118cqw; z-index: 0; }
-.grill-art { display: block; width: 100%; height: auto; filter: drop-shadow(0 4cqw 10cqw rgba(0, 0, 0, .55)); }
-.catcover-text { position: relative; z-index: 2; margin-top: auto; }
-.pg-catcover .pg-foot { margin-top: 0; }
-.pg-catcover.has-photo .pg-foot { margin-top: auto; }
-.catcover-title { font-size: 15cqw; line-height: .98; color: var(--paper); }
-.catcover-en { margin-top: 2cqw; font-size: 4.2cqw; color: var(--butter); }
-.catcover-note { margin-top: 2.4cqw; font-size: 3.1cqw; color: var(--on-char-soft); max-width: 70cqw; }
+/* ---------- trang món ----------
+   Đĩa ảnh tràn ra mép ngoài trang (trang trái: mép trái, trang phải: mép phải),
+   cột chữ nằm phía gáy sách. Tiêu đề danh mục viết tay (Pacifico) như chữ "Hana" trên logo. */
+.pg-dish .page-inner { padding: 7cqw 7cqw 5cqw; }
 
-/* có ảnh bìa: ảnh tràn trang, tên danh mục trong khung như menu in */
-.catcover-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-.has-photo .page-inner::before {
-  content: ""; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(to top, rgba(20, 12, 8, .7), transparent 30%);
-}
-.has-photo .catcover-text {
-  position: absolute; top: 7cqw; left: 7cqw; margin: 0;
-  padding: 2.4cqw 5cqw 2.8cqw;
-  border: .5cqw solid var(--butter);
-  border-radius: 3cqw;
-  background: rgba(20, 12, 8, .82);
-}
-.has-photo .catcover-title { font-size: 7.6cqw; color: var(--butter); }
-.has-photo .catcover-en { margin-top: .6cqw; font-size: 3cqw; color: var(--on-char); }
-.has-photo .catcover-note { display: none; }
-
-/* ---------- trang món ---------- */
-.items-head { padding-bottom: 3cqw; border-bottom: 1px solid var(--char-line); }
-.items-head h3 { font-size: 8cqw; color: var(--paper); }
-.items-cont { font-family: var(--font-body); font-size: 3.4cqw; color: var(--on-char-soft); }
-.items-head p { margin-top: 1cqw; font-size: 3cqw; color: var(--on-char-soft); }
-
-.items {
-  list-style: none; margin: 0; padding: 3cqw 0 0;
-  flex: 1; min-height: 0; overflow: hidden;
-  display: flex; flex-direction: column; justify-content: space-evenly; gap: 2.4cqw;
-}
-.item { display: flex; align-items: center; gap: 5cqw; }
-.item.is-flipped { flex-direction: row-reverse; text-align: right; }
-.item-img {
-  flex: none;
-  width: 25cqw; height: 25cqw;
+.dish-plates { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.dish-plate { position: absolute; margin: 0; aspect-ratio: 1; }
+.dish-plate img, .dish-plate .grill-art {
+  display: block; width: 100%; height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 2cqw 5cqw rgba(0, 0, 0, .5);
 }
-.item-text { min-width: 0; }
-.item-name { font-family: var(--font-display); font-size: 5.4cqw; line-height: 1.12; color: var(--paper); }
-.item-en { margin-top: .6cqw; font-size: 3cqw; color: var(--on-char-soft); }
-.item-desc { margin-top: .4cqw; font-size: 3cqw; color: #D8C6B8; }
-.item-tags { display: flex; flex-wrap: wrap; gap: 1.4cqw; margin-top: 1cqw; }
-.item.is-flipped .item-tags { justify-content: flex-end; }
-.item-price { margin-top: 1cqw; font-family: var(--font-display); font-size: 4.8cqw; color: var(--butter); }
+.dish-plate img {
+  border: 1.2cqw solid #3B2619;
+  box-shadow: 0 3cqw 8cqw rgba(0, 0, 0, .6);
+}
+.dish-plate-no {
+  position: absolute; top: 8%;
+  display: grid; place-items: center;
+  width: 7.6cqw; height: 7.6cqw;
+  border-radius: 50%;
+  background: var(--fire); color: var(--ink);
+  font-family: var(--font-display); font-size: 3.4cqw; line-height: 1;
+  box-shadow: 0 1cqw 3cqw rgba(0, 0, 0, .45);
+}
+/* 1 đĩa: lớn, giữa trang; 2 đĩa: trên và dưới, lệch nhau */
+.dish-plates-1 .dish-plate { width: 72cqw; top: 26cqw; }
+.dish-plates-2 .dish-plate:nth-child(1) { width: 60cqw; top: 3cqw; }
+.dish-plates-2 .dish-plate:nth-child(2) { width: 60cqw; top: 58cqw; }
+.p-left .dish-plates-1 .dish-plate { left: -36cqw; }
+.p-left .dish-plates-2 .dish-plate:nth-child(1) { left: -26cqw; }
+.p-left .dish-plates-2 .dish-plate:nth-child(2) { left: -32cqw; }
+.p-right .dish-plates-1 .dish-plate { right: -36cqw; }
+.p-right .dish-plates-2 .dish-plate:nth-child(1) { right: -26cqw; }
+.p-right .dish-plates-2 .dish-plate:nth-child(2) { right: -32cqw; }
+.p-left .dish-plate-no { right: 12%; }
+.p-right .dish-plate-no { left: 12%; }
+
+.dish-col {
+  position: relative; z-index: 2;
+  flex: 1; min-height: 0; overflow: hidden;
+  display: flex; flex-direction: column;
+  width: 56cqw;
+}
+.p-left .dish-col { margin-left: auto; }
+/* margin tự động: căn giữa theo chiều dọc khi còn chỗ, không bị cắt đầu khi dài */
+.dish-flow { margin-block: auto; }
+
+.cat-head { margin-top: 5cqw; font-family: "Pacifico", var(--font-display); font-weight: 400; font-size: 9.4cqw; line-height: 1.35; color: var(--butter); }
+.dish-flow > .cat-head:first-child { margin-top: 0; }
+.cat-cont { font-family: var(--font-body); font-size: 2.8cqw; color: var(--on-char-soft); }
+.cat-sub { margin-top: .4cqw; font-size: 2.8cqw; color: var(--on-char-soft); }
+.cat-sub span { display: block; }
+.cat-en { color: var(--on-char); }
+
+.dish { display: grid; grid-template-columns: 6.4cqw 1fr; gap: 2.6cqw; align-items: start; margin-top: 3cqw; }
+.dish-no {
+  display: grid; place-items: center;
+  width: 6.4cqw; height: 6.4cqw; margin-top: .2cqw;
+  border: .4cqw solid var(--fire); border-radius: 50%;
+  font-family: var(--font-display); font-size: 3cqw; line-height: 1; color: var(--butter);
+}
+.dish-text { min-width: 0; }
+.dish-name { font-family: var(--font-display); font-size: 4.6cqw; line-height: 1.15; color: var(--paper); }
+.dish-en { margin-top: .3cqw; font-size: 2.8cqw; color: var(--on-char-soft); }
+.dish-desc { margin-top: .3cqw; font-size: 2.9cqw; color: #D8C6B8; }
+.dish-tags { display: flex; flex-wrap: wrap; gap: 1.4cqw; margin-top: 1cqw; }
+.dish-price { margin-top: .6cqw; font-family: var(--font-display); font-size: 4.2cqw; color: var(--butter); }
 
 .bk-tag { padding: .3cqw 1.8cqw; border-radius: 1cqw; font-size: 2.5cqw; font-weight: 600; line-height: 1.6; }
 .bk-tag-hot { background: rgba(243, 112, 33, .22); color: #FFB27A; }
 .bk-tag-spicy { background: rgba(198, 47, 29, .32); color: #FF9E90; }
 .bk-tag-new { background: rgba(120, 190, 100, .2); color: #B8E3A6; }
 .bk-tag-plain { background: rgba(255, 255, 255, .1); color: var(--on-char); }
+
+.toc-note { margin-top: 4cqw; font-size: 2.8cqw; color: var(--on-char-soft); }
 
 /* ---------- trang đệm ---------- */
 .pg-filler .page-inner { align-items: center; justify-content: center; text-align: center; }

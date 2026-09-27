@@ -2,13 +2,13 @@
    Tạo các trang từ window.HANA_DATA rồi gắn hiệu ứng lật bằng StPageFlip (js/vendor, MIT).
 
    Thứ tự trang (chỉ số 0 là bìa):
-     0            bìa trước
-     1 | 2        bảng giá | mục lục
-     lẻ | chẵn    mỗi danh mục: trang bìa danh mục (trái) | trang món (phải)
-                  món được xếp thử vào một trang ẩn; hết chỗ thì sang trang mới
-                  (nên món có ảnh/mô tả dài sẽ ít món hơn mỗi trang);
-                  thêm trang đệm khi cần để bìa danh mục luôn nằm bên trái
-     cuối         bìa sau */
+     0        bìa trước
+     1 | 2    bảng giá | mục lục
+     3 …      trang món theo thứ tự danh mục trong data.js; món đánh số liên tục.
+              Một trang có thể chứa nhiều danh mục nhưng mỗi danh mục nằm trọn một trang:
+              xếp thử vào một trang ẩn, danh mục không vừa phần còn lại thì sang trang mới.
+              Mỗi trang in ảnh (đĩa tròn tràn mép ngoài) của tối đa 2 món đầu tiên có ảnh.
+     cuối     bìa sau (thêm trang đệm trước nếu cần để bìa sau nằm riêng) */
 (function () {
   "use strict";
 
@@ -20,7 +20,8 @@
     return;
   }
 
-  var MAX_ITEMS_PER_PAGE = 6;
+  var FIRST_DISH_PAGE = 3;
+  var PLATES_PER_PAGE = 2;
   var esc = U.esc, money = U.money;
   var brand = data.brand || {};
   var cats = (data.menu || []).filter(function (c) { return (c.items || []).length; });
@@ -29,17 +30,9 @@
   U.fillBrand(brand);
   U.initNav();
 
-  /* ---------- tạo trang ---------- */
-  var pages = [];     // { html, cls, hard, catId }
-  var catStart = {};  // id danh mục → chỉ số trang bìa danh mục
+  /* ---------- nội dung trang món ---------- */
 
-  function addPage(cls, html, opts) {
-    opts = opts || {};
-    pages.push({ cls: cls, html: html, hard: !!opts.hard, catId: opts.catId || null, foot: opts.foot !== false });
-  }
-
-
-  // Vỉ nướng — cùng hình với đầu trang chủ, dùng làm hình nền bìa danh mục khi chưa có ảnh
+  // Vỉ nướng — dùng làm "đĩa" khi trang không có món nào có ảnh
   function grillSvg(id) {
     var bars = "";
     for (var x = 46; x <= 358; x += 24) bars += '<line x1="' + x + '" y1="20" x2="' + x + '" y2="380"/>';
@@ -61,69 +54,108 @@
     }).join("");
   }
 
-  function itemHtml(item, i) {
-    var img = item.image
-      ? '<img class="item-img" src="' + esc(U.MENU_IMG_DIR + item.image) + '" alt="' + esc(item.name) + '" loading="lazy">'
-      : "";
-    return '<li class="item' + (img ? " has-img" : "") + (img && i % 2 ? " is-flipped" : "") + '">' +
-      img +
-      '<div class="item-text">' +
-        '<p class="item-name">' + esc(item.name) + "</p>" +
-        (item.nameEn ? '<p class="item-en">' + esc(item.nameEn) + "</p>" : "") +
-        (item.desc ? '<p class="item-desc">' + esc(item.desc) + "</p>" : "") +
-        ((item.tags || []).length ? '<p class="item-tags">' + tagsHtml(item.tags) + "</p>" : "") +
-        (U.hasPrice(item) ? '<p class="item-price">' + money(item.price) + "</p>" : "") +
+  function blockHtml(b) {
+    if (b.type === "head") {
+      return '<h3 class="cat-head"><span class="cat-name">' + esc(b.cat.name) + "</span>" +
+          (b.cont ? ' <span class="cat-cont">(tiếp)</span>' : "") + "</h3>" +
+        (!b.cont && (b.cat.nameEn || b.cat.note)
+          ? '<p class="cat-sub">' +
+              (b.cat.nameEn ? '<span class="cat-en">' + esc(b.cat.nameEn) + "</span>" : "") +
+              (b.cat.note ? '<span class="cat-note">' + esc(b.cat.note) + "</span>" : "") +
+            "</p>"
+          : "");
+    }
+    var item = b.item;
+    return '<div class="dish">' +
+      '<span class="dish-no">' + b.no + "</span>" +
+      '<div class="dish-text">' +
+        '<p class="dish-name">' + esc(item.name) + "</p>" +
+        (item.nameEn ? '<p class="dish-en">' + esc(item.nameEn) + "</p>" : "") +
+        (item.desc ? '<p class="dish-desc">' + esc(item.desc) + "</p>" : "") +
+        ((item.tags || []).length ? '<p class="dish-tags">' + tagsHtml(item.tags) + "</p>" : "") +
+        (U.hasPrice(item) ? '<p class="dish-price">' + money(item.price) + "</p>" : "") +
       "</div>" +
-      "</li>";
+      "</div>";
   }
 
-  function itemsPageHtml(cat, sub, group, gi) {
-    return '<header class="items-head">' +
-        "<h3>" + esc(cat.name) + (gi ? ' <span class="items-cont">(tiếp)</span>' : "") + "</h3>" +
-        "<p>" + esc(sub) + "</p>" +
-      "</header>" +
-      '<ul class="items">' + group.map(itemHtml).join("") + "</ul>";
+  function platesHtml(blocks, key) {
+    var withImg = blocks.filter(function (b) { return b.type === "item" && b.item.image; }).slice(0, PLATES_PER_PAGE);
+    if (!withImg.length) {
+      return '<div class="dish-plates dish-plates-1" aria-hidden="true"><div class="dish-plate dish-plate-grill">' + grillSvg(key) + "</div></div>";
+    }
+    return '<div class="dish-plates dish-plates-' + withImg.length + '" aria-hidden="true">' + withImg.map(function (b) {
+      return '<figure class="dish-plate">' +
+        '<img src="' + esc(U.MENU_IMG_DIR + b.item.image) + '" alt="" loading="lazy">' +
+        '<figcaption class="dish-plate-no">' + b.no + "</figcaption>" +
+        "</figure>";
+    }).join("") + "</div>";
   }
 
-  // Xếp thử món vào một trang ẩn cùng tỉ lệ 3:4; món nào làm tràn trang thì sang trang mới.
-  // Mọi kích thước trong trang tính theo bề rộng trang (cqw) nên đo một lần đúng cho mọi màn hình.
+  // Cột chữ; tách riêng để trang đo và trang thật dùng chung
+  function dishColHtml(blocks) {
+    return '<div class="dish-col"><div class="dish-flow">' + blocks.map(blockHtml).join("") + "</div></div>";
+  }
+
+  /* ---------- chia trang bằng cách đo ---------- */
+  // Trang ẩn cùng tỉ lệ 3:4; mọi kích thước tính theo bề rộng trang (cqw) nên đo một lần đúng mọi màn hình.
   var measurer = null;
-  function paginate(cat, sub) {
+  function fits(blocks) {
     if (!measurer) {
       measurer = document.createElement("div");
-      measurer.className = "page pg-items p-right";
+      measurer.className = "page pg-dish p-right";
       measurer.setAttribute("aria-hidden", "true");
       measurer.style.cssText = "position:absolute;left:-10000px;top:0;width:480px;height:640px;visibility:hidden";
       document.body.appendChild(measurer);
     }
-    function fits(group, gi) {
-      measurer.innerHTML = '<div class="page-inner">' + itemsPageHtml(cat, sub, group, gi) +
-        '<footer class="pg-foot"><span>Hana</span><span>0</span></footer></div>';
-      var list = measurer.querySelector(".items");
-      return list.scrollHeight <= list.clientHeight + 1;
-    }
-    var groups = [];
-    var current = [];
-    cat.items.forEach(function (item) {
-      var trial = current.concat([item]);
-      if (current.length && (trial.length > MAX_ITEMS_PER_PAGE || !fits(trial, groups.length))) {
-        groups.push(current);
-        current = [item];
-      } else {
-        current = trial;
-      }
-    });
-    if (current.length) groups.push(current);
-    return groups;
+    measurer.innerHTML = '<div class="page-inner">' + dishColHtml(blocks) +
+      '<footer class="pg-foot"><span>Hana</span><span>0</span></footer></div>';
+    var col = measurer.querySelector(".dish-col");
+    return col.scrollHeight <= col.clientHeight + 1;
   }
 
-  // Chờ font tải xong mới đo chia trang (font khác làm chữ cao/thấp khác); tối đa 2,5 giây
+  // Giữ trọn mỗi danh mục trên một trang: danh mục không vừa phần còn lại thì sang trang mới.
+  // Chỉ danh mục dài hơn cả một trang trống mới bị tách, phần sau có tiêu đề kèm "(tiếp)".
+  function paginate() {
+    var result = [];
+    var current = [];
+    var no = 0;
+
+    cats.forEach(function (cat) {
+      var blocks = [{ type: "head", cat: cat }].concat(cat.items.map(function (item) {
+        return { type: "item", cat: cat, item: item, no: ++no };
+      }));
+
+      if (current.length && !fits(current.concat(blocks))) {
+        result.push(current);
+        current = [];
+      }
+      if (fits(current.concat(blocks))) {
+        current = current.concat(blocks);
+        return;
+      }
+
+      // Danh mục quá dài cho một trang: tách theo từng món
+      blocks.forEach(function (b) {
+        if (b.type === "head") { current.push(b); return; }
+        if (current.length > 1 && !fits(current.concat([b]))) {
+          result.push(current);
+          current = [{ type: "head", cat: cat, cont: true }];
+        }
+        current.push(b);
+      });
+    });
+    if (current.length) result.push(current);
+    return result;
+  }
+
+  // Chờ font tải xong mới đo (font khác làm chữ cao/thấp khác); tối đa 2,5 giây
   function whenFontsReady(cb) {
     var done = false;
     function go() { if (!done) { done = true; cb(); } }
     if (document.fonts && document.fonts.load) {
       Promise.all([
-        document.fonts.load("400 20px \"Paytone One\""),
+        document.fonts.load('400 20px "Paytone One"'),
+        document.fonts.load('400 20px "Pacifico"'),
         document.fonts.load("400 16px Lexend"),
         document.fonts.load("500 16px Lexend")
       ]).then(go, go);
@@ -134,6 +166,14 @@
   whenFontsReady(build);
 
   function build() {
+    var pages = [];     // { cls, html, hard, foot, catIds }
+    var catStart = {};  // id danh mục → trang có tiêu đề đầu tiên của danh mục
+
+    function addPage(cls, html, opts) {
+      opts = opts || {};
+      pages.push({ cls: cls, html: html, hard: !!opts.hard, foot: opts.foot !== false, catIds: opts.catIds || [] });
+    }
+
     // 0 — bìa trước
     addPage("pg-cover",
       '<div class="cover-plate"><img src="assets/images/logo.png" alt="Hana BBQ & Hot Pot Buffet"></div>' +
@@ -158,42 +198,26 @@
       }).join("") + "</ul>" +
       '<ul class="pl-notes">' + (pricing.notes || []).map(function (n) { return "<li>" + esc(n) + "</li>"; }).join("") + "</ul>");
 
-    // 2 — mục lục (điền số trang sau khi biết vị trí các danh mục)
+    // 2 — mục lục (điền sau khi biết số trang)
     addPage("pg-toc", "");
 
-    // Danh mục
-    cats.forEach(function (cat) {
-      var id = cat.id;
-      catStart[id] = pages.length;
-
-      // Trang bìa danh mục
-      var cover = cat.cover
-        ? '<img class="catcover-photo" src="' + esc(U.MENU_IMG_DIR + cat.cover) + '" alt="">'
-        : '<div class="catcover-art">' + grillSvg(id) + "</div>";
-      addPage("pg-catcover" + (cat.cover ? " has-photo" : ""),
-        cover +
-        '<div class="catcover-text">' +
-          '<h2 class="catcover-title">' + esc(cat.name) + "</h2>" +
-          (cat.nameEn ? '<p class="catcover-en">' + esc(cat.nameEn) + "</p>" : "") +
-          (cat.note ? '<p class="catcover-note">' + esc(cat.note) + "</p>" : "") +
-        "</div>",
-        { catId: id });
-
-      // Trang món
-      var allPriced = cat.items.every(U.hasPrice);
-      var sub = cat.note || (allPriced ? "Tính riêng" : "Đã gồm trong giá buffet");
-      paginate(cat, sub).forEach(function (group, gi) {
-        addPage("pg-items", itemsPageHtml(cat, sub, group, gi), { catId: id });
+    // 3… — trang món
+    paginate().forEach(function (blocks) {
+      var index = pages.length;
+      var ids = [];
+      blocks.forEach(function (b) {
+        if (ids.indexOf(b.cat.id) === -1) ids.push(b.cat.id);
+        if (b.type === "head" && !b.cont) catStart[b.cat.id] = index;
       });
-
-      // Trang đệm để danh mục sau bắt đầu ở trang trái (chỉ số lẻ)
-      if (pages.length % 2 === 0) {
-        addPage("pg-filler",
-          '<p class="filler-mark">Hana</p>' +
-          '<p class="filler-text">' + esc(data.menuIntro || "") + "</p>",
-          { catId: id });
-      }
+      addPage("pg-dish", platesHtml(blocks, "p" + index) + dishColHtml(blocks), { catIds: ids });
     });
+
+    // Trang đệm: bìa sau phải ở chỉ số lẻ để đứng riêng
+    if (pages.length % 2 === 0) {
+      addPage("pg-filler",
+        '<p class="filler-mark">Hana</p>' +
+        '<p class="filler-text">' + esc(data.menuIntro || "") + "</p>");
+    }
 
     // Mục lục
     pages[2].html =
@@ -201,13 +225,14 @@
       '<ol class="toc">' +
         '<li><button type="button" data-goto="1"><span>Bảng giá buffet</span><span class="toc-leader"></span><span class="toc-num">1</span></button></li>' +
         cats.map(function (c) {
-          return '<li><button type="button" data-goto="' + catStart[c.id] + '">' +
+          return '<li><button type="button" data-goto="' + catStart[c.id] + '" data-cat="' + esc(c.id) + '">' +
             "<span>" + esc(c.name) + "</span>" +
             '<span class="toc-leader"></span><span class="toc-num">' + catStart[c.id] + "</span></button></li>";
         }).join("") +
-      "</ol>";
+      "</ol>" +
+      '<p class="toc-note">Hình ảnh món ăn chỉ mang tính minh họa.</p>';
 
-    // Bìa sau — số trang luôn chẵn vì danh mục cuối kết thúc ở trang phải
+    // Bìa sau
     var branches = (data.branches || []).filter(function (b) { return b.active !== false; });
     addPage("pg-back",
       '<p class="back-mark">Hana</p>' +
@@ -246,7 +271,6 @@
     if (!window.St || !window.St.PageFlip) {
       book.classList.add("is-static");
       document.querySelector(".book-controls").hidden = true;
-      document.querySelector(".book-hint").hidden = true;
       jump.addEventListener("click", function (e) {
         var btn = e.target.closest("[data-goto]");
         if (btn) book.children[+btn.getAttribute("data-goto")].scrollIntoView({ behavior: "smooth" });
@@ -279,8 +303,15 @@
       return catStart[id] || 0;
     }
 
-    function catAt(index) {
-      return pages[index] ? pages[index].catId : null;
+    // Danh mục khách vừa chọn (tab, mục lục, #hash) — giữ tô sáng nếu còn nằm trên trang đang mở
+    var wanted = decodeURIComponent(location.hash.slice(1)) || null;
+
+    function catsOn(indexes) {
+      var ids = [];
+      indexes.forEach(function (i) {
+        (pages[i] ? pages[i].catIds : []).forEach(function (id) { if (ids.indexOf(id) === -1) ids.push(id); });
+      });
+      return ids;
     }
 
     function goTo(index) {
@@ -304,8 +335,10 @@
       nextBtn.disabled = i >= last;
 
       // Tab đang đọc + cập nhật #hash để chia sẻ đúng trang
-      var cat = catAt(landscape && i % 2 === 0 && i > 0 ? i - 1 : i);
-      var onPrices = !cat && i >= 1 && i <= 2;
+      var visible = !landscape || i === 0 || i === last ? [i] : i % 2 ? [i, i + 1] : [i - 1, i];
+      var ids = catsOn(visible);
+      var cat = ids.indexOf(wanted) > -1 ? wanted : ids[0] || null;
+      var onPrices = !cat && i >= 1 && i < FIRST_DISH_PAGE;
       Array.prototype.forEach.call(jump.querySelectorAll(".tab"), function (t) {
         var active = cat ? t.getAttribute("data-cat") === cat : onPrices && t.getAttribute("data-goto") === "1";
         t.setAttribute("aria-current", active ? "true" : "false");
@@ -324,7 +357,18 @@
 
     document.addEventListener("click", function (e) {
       var btn = e.target.closest("[data-goto]");
-      if (btn) goTo(+btn.getAttribute("data-goto"));
+      if (!btn) return;
+      wanted = btn.getAttribute("data-cat");
+      goTo(+btn.getAttribute("data-goto"));
+      update();   // danh mục đã nằm trên trang đang mở thì không có lần lật nào gọi update()
+    });
+
+    // Đổi #danh-muc trên cùng trang (vd bấm link menu.html#lau khi đang xem menu) → lật tới đó
+    window.addEventListener("hashchange", function () {
+      var target = startIndexFromHash();
+      if (!target) return;
+      wanted = decodeURIComponent(location.hash.slice(1));
+      goTo(target);
     });
 
     document.addEventListener("keydown", function (e) {
