@@ -89,103 +89,131 @@ window.HANA_DATA = {
   },
 
   /* ---------- MENU ----------
+     Dùng cho cả trang chủ và cuốn menu lật trang (menu.html).
+
      Mỗi danh mục (category) gồm:
-       id    : mã ngắn, không dấu, không khoảng trắng (vd "bo-nuong")
-       name  : tên hiển thị
-       note  : ghi chú nhỏ cho cả danh mục (có thể để "")
-       items : danh sách món
+       id     : mã ngắn, không dấu, không khoảng trắng (vd "bo-nuong")
+       name   : tên hiển thị
+       nameEn : tên tiếng Anh, hiện nhỏ bên dưới (có thể để "")
+       note   : ghi chú nhỏ cho cả danh mục (có thể để "")
+       cover  : ảnh lớn cho trang bìa danh mục trong cuốn menu, bỏ file vào
+                assets/images/menu/ (vd "cover-lau.jpg"). Để "" sẽ dùng bìa chữ.
+                Nên dùng ảnh dọc, tỉ lệ 3:4, khoảng 1200×1600px, dưới 400KB.
+       items  : danh sách món
 
      Mỗi món (item) gồm:
-       name  : tên món
-       desc  : mô tả ngắn (có thể để "")
-       image : tên file ảnh trong assets/images/menu/ (có thể để "")
-       tags  : nhãn, vd ["Bán chạy"], ["Cay"], ["Mới"] — để [] nếu không có
-       price : CHỈ ghi khi món tính tiền riêng (đồ uống, món thêm).
-               Món nằm trong buffet thì bỏ trống hoặc xóa dòng price.
+       name   : tên món
+       nameEn : tên tiếng Anh (có thể để "")
+       desc   : mô tả ngắn (có thể để "")
+       image  : ảnh món trong assets/images/menu/ (có thể để "").
+                Ảnh vuông ~600×600px; ảnh chụp từ trên xuống, nền tối/trong suốt
+                (PNG) sẽ đẹp nhất khi đặt trên trang menu tối.
+       tags   : nhãn, vd ["Bán chạy"], ["Cay"], ["Mới"] — để [] nếu không có
+       price  : CHỈ ghi khi món tính tiền riêng (đồ uống, món thêm).
+                Món nằm trong buffet thì bỏ trống hoặc xóa dòng price.
+
+     Thứ tự danh mục ở đây = thứ tự trong cuốn menu và trên trang chủ.
+     Cuốn menu tự chia trang: mỗi trang tối đa 5 món, danh mục dài sẽ sang trang tiếp.
   */
   menuIntro: "Gọi món tại bàn, không giới hạn số lần gọi. Đồ uống tính riêng.",
 
   menu: [
     {
+      id: "khai-vi",
+      name: "Khai vị & Salad",
+      nameEn: "Starters & salad",
+      note: "",
+      cover: "",
+      items: [
+        { name: "Salad rau củ sốt mayonnaise nhà làm", nameEn: "Garden salad, house mayonnaise", desc: "", image: "", tags: [] },
+        { name: "Kim chi", nameEn: "Kimchi", desc: "", image: "", tags: [] }
+      ]
+    },
+    {
       id: "bo-nuong",
       name: "Bò nướng",
-      note: "",
+      nameEn: "Grilled beef",
+      note: "Bò Mỹ và bò Úc nhập khẩu",
+      cover: "",
       items: [
-        { name: "Ba chỉ bò Mỹ", desc: "Thái mỏng, sốt Hana đặc biệt", image: "", tags: ["Bán chạy"] },
-        { name: "Bắp bò Úc", desc: "Mềm, ngọt thịt", image: "", tags: [] },
-        { name: "Lõi vai bò Mỹ", desc: "Ướp sốt tiêu đen", image: "", tags: [] },
-        { name: "Sườn bò non sốt Galbi", desc: "Phong cách Hàn Quốc", image: "", tags: ["Mới"] }
+        { name: "Ba chỉ bò Mỹ", nameEn: "US beef belly", desc: "Thái mỏng, sốt Hana đặc biệt", image: "", tags: ["Bán chạy"] },
+        { name: "Bắp bò Úc", nameEn: "Australian beef shank", desc: "Mềm, ngọt thịt", image: "", tags: [] },
+        { name: "Lõi vai bò Mỹ", nameEn: "US chuck eye", desc: "Ướp sốt tiêu đen", image: "", tags: [] },
+        { name: "Sườn bò non sốt Galbi", nameEn: "Galbi short rib", desc: "Phong cách Hàn Quốc", image: "", tags: ["Mới"] }
       ]
     },
     {
       id: "heo-ga",
       name: "Heo & Gà",
+      nameEn: "Pork & chicken",
       note: "",
+      cover: "",
       items: [
-        { name: "Ba chỉ heo nướng", desc: "", image: "", tags: [] },
-        { name: "Gà nướng lá dứa", desc: "Thơm lá dứa, da giòn", image: "", tags: ["Bán chạy"] },
-        { name: "Cánh gà sốt cay", desc: "", image: "", tags: ["Cay"] },
-        { name: "Xiên nai nướng", desc: "", image: "", tags: [] }
+        { name: "Ba chỉ heo nướng", nameEn: "Grilled pork belly", desc: "", image: "", tags: [] },
+        { name: "Gà nướng lá dứa", nameEn: "Pandan grilled chicken", desc: "Thơm lá dứa, da giòn", image: "", tags: ["Bán chạy"] },
+        { name: "Cánh gà sốt cay", nameEn: "Spicy chicken wings", desc: "", image: "", tags: ["Cay"] },
+        { name: "Xiên nai nướng", nameEn: "Venison skewers", desc: "", image: "", tags: [] }
       ]
     },
     {
       id: "hai-san",
       name: "Hải sản",
+      nameEn: "Seafood",
       note: "",
+      cover: "",
       items: [
-        { name: "Tôm nướng", desc: "", image: "", tags: [] },
-        { name: "Mực nướng sa tế", desc: "", image: "", tags: ["Cay"] },
-        { name: "Sò điệp nướng mỡ hành", desc: "", image: "", tags: ["Bán chạy"] },
-        { name: "Nghêu hấp", desc: "", image: "", tags: [] }
-      ]
-    },
-    {
-      id: "lau",
-      name: "Lẩu",
-      note: "Chọn 1 loại nước lẩu cho mỗi bàn",
-      items: [
-        { name: "Lẩu Thái chua cay", desc: "", image: "", tags: ["Cay"] },
-        { name: "Lẩu Miso Nhật", desc: "Thanh ngọt, đậm vị", image: "", tags: [] },
-        { name: "Rau & nấm nhúng lẩu", desc: "", image: "", tags: [] }
+        { name: "Tôm nướng", nameEn: "Grilled prawns", desc: "", image: "", tags: [] },
+        { name: "Mực nướng sa tế", nameEn: "Satay grilled squid", desc: "", image: "", tags: ["Cay"] },
+        { name: "Sò điệp nướng mỡ hành", nameEn: "Scallops with scallion oil", desc: "", image: "", tags: ["Bán chạy"] },
+        { name: "Nghêu hấp", nameEn: "Steamed clams", desc: "", image: "", tags: [] }
       ]
     },
     {
       id: "mon-au",
       name: "Món Âu",
+      nameEn: "Western dishes",
       note: "",
+      cover: "",
       items: [
-        { name: "Pizza hải sản", desc: "", image: "", tags: [] },
-        { name: "Mì Ý sốt bò bằm", desc: "", image: "", tags: [] },
-        { name: "Khoai tây chiên", desc: "", image: "", tags: [] }
+        { name: "Pizza hải sản", nameEn: "Seafood pizza", desc: "", image: "", tags: [] },
+        { name: "Mì Ý sốt bò bằm", nameEn: "Spaghetti bolognese", desc: "", image: "", tags: [] },
+        { name: "Khoai tây chiên", nameEn: "French fries", desc: "", image: "", tags: [] }
       ]
     },
     {
-      id: "khai-vi",
-      name: "Khai vị & Salad",
-      note: "",
+      id: "lau",
+      name: "Lẩu",
+      nameEn: "Hot pot",
+      note: "Chọn 1 loại nước lẩu cho mỗi bàn",
+      cover: "",
       items: [
-        { name: "Salad rau củ sốt mayonnaise nhà làm", desc: "", image: "", tags: [] },
-        { name: "Kim chi", desc: "", image: "", tags: [] }
+        { name: "Lẩu Thái chua cay", nameEn: "Thai tom yum hot pot", desc: "", image: "", tags: ["Cay"] },
+        { name: "Lẩu Miso Nhật", nameEn: "Japanese miso hot pot", desc: "Thanh ngọt, đậm vị", image: "", tags: [] },
+        { name: "Rau & nấm nhúng lẩu", nameEn: "Vegetables & mushrooms", desc: "", image: "", tags: [] }
       ]
     },
     {
       id: "trang-mieng",
       name: "Tráng miệng",
+      nameEn: "Desserts",
       note: "",
+      cover: "",
       items: [
-        { name: "Kem", desc: "Nhiều vị", image: "", tags: [] },
-        { name: "Sữa chua", desc: "", image: "", tags: [] },
-        { name: "Thạch trái cây", desc: "", image: "", tags: [] }
+        { name: "Kem", nameEn: "Ice cream", desc: "Nhiều vị", image: "", tags: [] },
+        { name: "Sữa chua", nameEn: "Yogurt", desc: "", image: "", tags: [] },
+        { name: "Thạch trái cây", nameEn: "Fruit jelly", desc: "", image: "", tags: [] }
       ]
     },
     {
       id: "do-uong",
       name: "Đồ uống",
+      nameEn: "Drinks",
       note: "Đồ uống tính riêng, không nằm trong giá buffet",
+      cover: "",
       items: [
-        { name: "Nước ngọt các loại", desc: "", image: "", tags: [], price: 25000 },
-        { name: "Trà đào", desc: "", image: "", tags: [], price: 35000 },
-        { name: "Bia Tiger", desc: "Lon 330ml", image: "", tags: [], price: 30000 }
+        { name: "Nước ngọt các loại", nameEn: "Soft drinks", desc: "", image: "", tags: [], price: 25000 },
+        { name: "Trà đào", nameEn: "Peach tea", desc: "", image: "", tags: [], price: 35000 },
+        { name: "Bia Tiger", nameEn: "Tiger beer", desc: "Lon 330ml", image: "", tags: [], price: 30000 }
       ]
     }
   ],

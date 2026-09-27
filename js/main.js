@@ -13,32 +13,14 @@
   }
 
   var brand = data.brand || {};
-  var MENU_IMG_DIR = "assets/images/menu/";
-  var IMG_DIR = "assets/images/";
-
-  /* ---------- helpers ---------- */
-  function esc(value) {
-    return String(value == null ? "" : value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
-
-  var vnd = new Intl.NumberFormat("vi-VN");
-  function money(n) {
-    return vnd.format(n) + "₫";
-  }
+  var U = window.HanaUtil;
+  var esc = U.esc, money = U.money, telHref = U.telHref;
 
   function $(sel) { return document.querySelector(sel); }
   function $all(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
 
   function fill(sel, html) {
     $all(sel).forEach(function (el) { el.innerHTML = html; });
-  }
-
-  function telHref(number) {
-    return "tel:" + String(number || "").replace(/[^\d+]/g, "");
   }
 
   // Icon nét mảnh cho thông tin chi nhánh
@@ -50,11 +32,7 @@
 
   /* ---------- thông tin chung ---------- */
   function renderBrand() {
-    $all("[data-hotline-link]").forEach(function (a) { a.href = telHref(brand.hotline); });
-    fill("[data-hotline-text]", esc(brand.hotlineDisplay || brand.hotline));
-    fill("[data-opening-hours]", esc(brand.openingHours));
-    fill("[data-brand-name]", esc(brand.name));
-    fill("[data-year]", new Date().getFullYear());
+    U.fillBrand(brand);
     if (brand.headline) fill("[data-brand-headline]", esc(brand.headline));
     fill("[data-brand-tagline]", esc(brand.tagline));
 
@@ -145,78 +123,17 @@
     }
   }
 
-  /* ---------- menu ---------- */
-  function tagClass(tag) {
-    var t = String(tag).toLowerCase();
-    if (t.indexOf("cay") > -1) return "spicy";
-    if (t.indexOf("mới") > -1) return "new";
-    if (t.indexOf("bán chạy") > -1) return "hot";
-    return "plain";
-  }
-
-  function menuItemHtml(item) {
-    var hasPrice = item.price != null && item.price !== "";
-    var tags = (item.tags || []).map(function (t) {
-      return '<span class="tag tag-' + tagClass(t) + '">' + esc(t) + "</span>";
-    }).join("");
-
-    return '<li class="dish">' +
-      (item.image ? '<img class="dish-img" src="' + esc(MENU_IMG_DIR + item.image) + '" alt="' + esc(item.name) + '" loading="lazy">' : "") +
-      '<div class="dish-body">' +
-        '<p class="dish-line"><span class="dish-name">' + esc(item.name) + "</span>" +
-          (tags ? " " + tags : "") +
-          (hasPrice ? '<span class="leader" aria-hidden="true"></span><span class="dish-price">' + money(item.price) + "</span>" : "") +
-        "</p>" +
-        (item.desc ? '<p class="dish-desc">' + esc(item.desc) + "</p>" : "") +
-      "</div>" +
-      "</li>";
-  }
-
-  function categoryHtml(cat) {
-    return '<section class="menu-cat" id="menu-' + esc(cat.id) + '">' +
-      '<div class="menu-cat-head">' +
-        "<h3>" + esc(cat.name) + "</h3>" +
-        (cat.note ? '<p class="menu-cat-note">' + esc(cat.note) + "</p>" : "") +
-      "</div>" +
-      '<ul class="dish-list">' + (cat.items || []).map(menuItemHtml).join("") + "</ul>" +
-      "</section>";
-  }
-
-  function renderMenu() {
+  /* ---------- menu (trang chủ chỉ giới thiệu, menu đầy đủ ở menu.html) ---------- */
+  function renderMenuTeaser() {
     var cats = data.menu || [];
-    var tabs = $("[data-menu-tabs]");
-    var body = $("[data-menu-body]");
-    if (!tabs || !body) return;
-
     fill("[data-menu-intro]", esc(data.menuIntro || ""));
-
-    var tabList = [{ id: "all", name: "Tất cả" }].concat(cats);
-    tabs.innerHTML = tabList.map(function (c, i) {
-      return '<button type="button" role="tab" class="tab" data-cat="' + esc(c.id) + '" aria-selected="' + (i === 0) + '">' +
-        esc(c.name) + "</button>";
-    }).join("");
-
-    function show(id) {
-      var list = id === "all" ? cats : cats.filter(function (c) { return c.id === id; });
-      body.innerHTML = list.map(categoryHtml).join("");
-      $all("[data-menu-tabs] .tab").forEach(function (b) {
-        b.setAttribute("aria-selected", String(b.getAttribute("data-cat") === id));
-      });
-    }
-
-    tabs.addEventListener("click", function (e) {
-      var btn = e.target.closest("[data-cat]");
-      if (!btn) return;
-      show(btn.getAttribute("data-cat"));
-      btn.scrollIntoView({ block: "nearest", inline: "center" });
-      // Đang cuộn giữa menu thì đưa về đầu danh sách món
-      var bar = $(".menu-tabs-bar");
-      if (bar && body.getBoundingClientRect().top < bar.getBoundingClientRect().bottom) {
-        $("#menu").scrollIntoView();
-      }
-    });
-
-    show("all");
+    fill("[data-menu-cats]", cats.map(function (c) {
+      var count = (c.items || []).length;
+      return '<li><a class="menu-cat-link" href="menu.html#' + esc(c.id) + '">' +
+        '<span class="menu-cat-name">' + esc(c.name) + "</span>" +
+        '<span class="menu-cat-meta">' + (c.nameEn ? esc(c.nameEn) + ", " : "") + count + " món</span>" +
+        "</a></li>";
+    }).join(""));
   }
 
   /* ---------- chi nhánh ---------- */
@@ -250,7 +167,7 @@
   function branchHtml(b) {
     var phoneText = b.phone || brand.hotlineDisplay || brand.hotline;
     return '<article class="branch' + (b._nearest ? " is-nearest" : "") + '">' +
-      (b.image ? '<img class="branch-img" src="' + esc(IMG_DIR + b.image) + '" alt="Hana Buffet ' + esc(b.name) + '" loading="lazy">' : "") +
+      (b.image ? '<img class="branch-img" src="' + esc(U.IMG_DIR + b.image) + '" alt="Hana Buffet ' + esc(b.name) + '" loading="lazy">' : "") +
       (b._nearest ? '<p class="nearest-label">Gần bạn nhất</p>' : "") +
       '<div class="branch-title">' +
         "<h3>Hana " + esc(b.name) + "</h3>" +
@@ -373,38 +290,10 @@
     });
   }
 
-  /* ---------- điều hướng ---------- */
-  function initNav() {
-    var toggle = $(".nav-toggle");
-    var nav = $("#site-nav");
-    var header = $(".site-header");
-    if (!toggle || !nav) return;
-
-    function setOpen(open) {
-      nav.classList.toggle("is-open", open);
-      toggle.setAttribute("aria-expanded", String(open));
-      toggle.setAttribute("aria-label", open ? "Đóng menu" : "Mở menu");
-    }
-
-    toggle.addEventListener("click", function () {
-      setOpen(!nav.classList.contains("is-open"));
-    });
-    nav.addEventListener("click", function (e) {
-      if (e.target.closest("a")) setOpen(false);
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") setOpen(false);
-    });
-
-    window.addEventListener("scroll", function () {
-      header.classList.toggle("is-scrolled", window.scrollY > 8);
-    }, { passive: true });
-  }
-
   renderBrand();
   renderAbout();
   renderPricing();
-  renderMenu();
+  renderMenuTeaser();
   renderBranches();
-  initNav();
+  U.initNav();
 })();

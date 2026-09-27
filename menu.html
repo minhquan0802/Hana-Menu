@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Menu – Hana BBQ & Hot Pot Buffet</title>
+  <meta name="description" content="Menu Hana BBQ & Hot Pot Buffet: bò Mỹ & Úc, heo, gà, hải sản, lẩu Thái, lẩu Miso, món Âu, tráng miệng và đồ uống.">
+  <meta name="theme-color" content="#2A1B14">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Menu – Hana BBQ & Hot Pot Buffet">
+  <meta property="og:description" content="Lật xem menu buffet lẩu nướng Hana.">
+  <meta property="og:image" content="assets/images/logo.png">
+
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&family=Paytone+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/menu.css">
+</head>
+<body class="menu-page">
+
+  <!-- ===== HEADER (giống trang chủ) ===== -->
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="wordmark" aria-label="Hana BBQ & Hot Pot Buffet – trang chủ">
+        <span class="wordmark-name">Hana</span>
+        <span class="wordmark-sub">BBQ &amp; Hot Pot Buffet</span>
+      </a>
+      <button class="nav-toggle" aria-label="Mở menu" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" id="site-nav">
+        <a href="index.html#bang-gia">Bảng giá</a>
+        <a href="menu.html" aria-current="page">Menu</a>
+        <a href="index.html#gioi-thieu">Về Hana</a>
+        <a href="index.html#chi-nhanh">Chi nhánh</a>
+        <a class="btn btn-fire nav-call" data-hotline-link href="#">Gọi <span data-hotline-text></span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="book-stage">
+    <h1 class="visually-hidden">Menu Hana BBQ &amp; Hot Pot Buffet</h1>
+
+    <!-- Chuyển nhanh tới danh mục -->
+    <nav class="book-jump" aria-label="Danh mục menu">
+      <div class="wrap">
+        <div class="tabs tabs-dark" data-book-jump></div>
+      </div>
+    </nav>
+
+    <!-- Cuốn menu: các trang do js/menu-book.js tạo từ data/data.js -->
+    <div class="book-wrap">
+      <div class="book" id="book" data-book></div>
+    </div>
+
+    <div class="book-controls">
+      <button type="button" class="book-btn" data-book-prev aria-label="Trang trước">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <p class="book-counter" data-book-counter aria-live="polite"></p>
+      <button type="button" class="book-btn" data-book-next aria-label="Trang sau">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+    <p class="book-hint">Kéo góc trang, vuốt hoặc dùng phím ← → để lật.</p>
+  </main>
+
+  <!-- data.js phải nạp TRƯỚC các file js khác -->
+  <script src="data/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/vendor/page-flip.browser.js"></script>
+  <script src="js/menu-book.js"></script>
+</body>
+</html>

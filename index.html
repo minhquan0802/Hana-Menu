@@ -20,7 +20,7 @@
 </head>
 <body>
 
-  <a class="skip-link" href="#menu">Bỏ qua, xem menu</a>
+  <a class="skip-link" href="#bang-gia">Bỏ qua, xem bảng giá</a>
 
   <!-- ===== HEADER ===== -->
   <header class="site-header">
@@ -34,7 +34,7 @@
       </button>
       <nav class="site-nav" id="site-nav">
         <a href="#bang-gia">Bảng giá</a>
-        <a href="#menu">Menu</a>
+        <a href="menu.html">Menu</a>
         <a href="#gioi-thieu">Về Hana</a>
         <a href="#chi-nhanh">Chi nhánh</a>
         <a class="btn btn-fire nav-call" data-hotline-link href="#">Gọi <span data-hotline-text></span></a>
@@ -53,7 +53,7 @@
           <div class="ticket" data-now-ticket></div>
 
           <div class="hero-actions">
-            <a href="#menu" class="btn btn-fire">Xem menu</a>
+            <a href="menu.html" class="btn btn-fire">Mở menu</a>
             <a href="#chi-nhanh" class="btn btn-ghost">Chọn chi nhánh</a>
           </div>
         </div>
@@ -107,18 +107,18 @@
       </div>
     </section>
 
-    <!-- ===== MENU ===== -->
+    <!-- ===== MENU (giới thiệu; menu đầy đủ ở menu.html) ===== -->
     <section class="block block-menu" id="menu">
       <div class="wrap">
-        <h2 class="block-title">Menu</h2>
-        <p class="block-lead" data-menu-intro></p>
-      </div>
-      <div class="menu-tabs-bar">
-        <div class="wrap">
-          <div class="tabs" role="tablist" aria-label="Danh mục món" data-menu-tabs></div>
+        <div class="menu-teaser-head">
+          <div>
+            <h2 class="block-title">Menu</h2>
+            <p class="block-lead" data-menu-intro></p>
+          </div>
+          <a class="btn btn-line" href="menu.html">Mở cuốn menu</a>
         </div>
+        <ul class="menu-cats" data-menu-cats></ul>
       </div>
-      <div class="wrap" data-menu-body></div>
     </section>
 
     <!-- ===== VỀ HANA ===== -->
@@ -171,6 +171,7 @@
 
   <!-- data.js phải nạp TRƯỚC main.js -->
   <script src="data/data.js"></script>
+  <script src="js/common.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

@@ -218,35 +218,19 @@ p { margin: 0; }
 .price-notes { list-style: none; margin: 20px 0 0; padding: 0; font-size: 14px; color: var(--ink-soft); }
 .price-notes li + li { margin-top: 4px; }
 
-/* ---------- menu ---------- */
-.block-menu { padding-bottom: 72px; }
-.menu-tabs-bar {
-  position: sticky; top: var(--header-h); z-index: 20;
-  margin-top: 28px;
-  background: var(--paper);
+/* ---------- menu (giới thiệu trên trang chủ) ---------- */
+.menu-teaser-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px 32px; }
+.menu-cats {
+  list-style: none; margin: 36px 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 2px solid var(--ink);
 }
-.menu-cat { padding-top: 44px; }
-.menu-cat-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; margin-bottom: 8px; }
-.menu-cat-head h3 { font-size: 30px; }
-.menu-cat-note { font-size: 14px; color: var(--ink-soft); }
-
-.dish-list {
-  list-style: none; margin: 0; padding: 0;
-  display: grid; grid-template-columns: 1fr 1fr; column-gap: 56px;
-}
-.dish { display: flex; gap: 14px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--smoke); }
-.dish-img { width: 64px; height: 64px; flex: none; border-radius: 8px; object-fit: cover; background: var(--smoke); }
-.dish-body { flex: 1; min-width: 0; }
-.dish-line { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 8px; }
-.dish-name { font-size: 17px; font-weight: 500; }
-.leader { flex: 1 1 24px; min-width: 24px; border-bottom: 2px dotted #D6CABF; transform: translateY(-4px); }
-.dish-price { font-weight: 600; color: var(--fire-deep); white-space: nowrap; }
-.dish-desc { margin-top: 2px; font-size: 14px; color: var(--ink-soft); }
-.tag { padding: 1px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; line-height: 1.6; }
-.tag-hot { background: #FFE6D3; color: var(--fire-deep); }
-.tag-spicy { background: #FBE1DC; color: var(--chili); }
-.tag-new { background: #E4F0DE; color: #2F6B27; }
-.tag-plain { background: var(--smoke); color: var(--ink-soft); }
+.menu-cats li { border-bottom: 1px solid var(--smoke); }
+.menu-cats li:not(:nth-child(4n)) { border-right: 1px solid var(--smoke); }
+.menu-cat-link { display: block; height: 100%; padding: 22px 20px 20px; color: var(--ink); text-decoration: none; transition: background-color .15s; }
+.menu-cat-link:hover { background: var(--butter-soft); }
+.menu-cat-name { display: block; font-family: var(--font-display); font-size: 24px; line-height: 1.15; }
+.menu-cat-meta { display: block; margin-top: 4px; font-size: 14px; color: var(--ink-soft); }
 
 /* ---------- về Hana ---------- */
 .about { background: var(--char); color: var(--on-char); padding: 96px 0; }
@@ -350,7 +334,9 @@ p { margin: 0; }
   .grill { order: -1; justify-self: center; max-width: 340px; width: 82%; }
 
   .block { padding: 64px 0; }
-  .dish-list { grid-template-columns: 1fr; }
+  .menu-cats { grid-template-columns: repeat(2, 1fr); }
+  .menu-cats li:not(:nth-child(4n)) { border-right: 0; }
+  .menu-cats li:nth-child(odd) { border-right: 1px solid var(--smoke); }
   .about { padding: 72px 0; }
   .about-inner { grid-template-columns: 1fr; gap: 44px; }
   .branch-grid { grid-template-columns: 1fr; }
