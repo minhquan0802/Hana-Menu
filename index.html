@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hana BBQ & Hot Pot Buffet – Buffet lẩu nướng Nhật Hàn Âu</title>
+  <meta name="description" content="Hana BBQ & Hot Pot Buffet – buffet lẩu nướng gọi món tại bàn phong cách Nhật, Hàn, Âu. Bò Mỹ & Úc, hải sản, lẩu Thái, lẩu Miso. Hệ thống chi nhánh tại TP.HCM và Vũng Tàu.">
+  <meta name="theme-color" content="#F37021">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Hana BBQ & Hot Pot Buffet">
+  <meta property="og:description" content="Buffet lẩu nướng phong cách Nhật – Hàn – Âu. Xem menu, bảng giá và chi nhánh gần bạn.">
+  <meta property="og:image" content="assets/images/logo.png">
+
+  <link rel="icon" type="image/png" href="assets/images/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" id="top">
+    <div class="container header-inner">
+      <a href="#top" class="header-logo" aria-label="Hana Buffet – về đầu trang">
+        <img src="assets/images/logo.png" alt="Hana BBQ & Hot Pot Buffet" width="56" height="56">
+      </a>
+      <button class="nav-toggle" aria-label="Mở menu" aria-expanded="false" aria-controls="site-nav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" id="site-nav">
+        <a href="#gioi-thieu">Giới thiệu</a>
+        <a href="#bang-gia">Bảng giá</a>
+        <a href="#menu">Menu</a>
+        <a href="#chi-nhanh">Chi nhánh</a>
+        <a class="btn btn-primary btn-sm" data-hotline-link href="#">Đặt bàn</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="eyebrow">Buffet lẩu nướng gọi món tại bàn</p>
+          <h1 data-brand-tagline>Buffet lẩu nướng phong cách Nhật – Hàn – Âu</h1>
+          <p class="hero-sub">Bò Mỹ &amp; Úc, hải sản, lẩu Thái, lẩu Miso, pizza, mì Ý… không giới hạn.</p>
+          <div class="hero-price" data-hero-price hidden></div>
+          <div class="hero-actions">
+            <a href="#menu" class="btn btn-primary">Xem menu</a>
+            <a href="#chi-nhanh" class="btn btn-outline">Tìm chi nhánh</a>
+          </div>
+          <p class="hero-meta">
+            <span>🕚 <span data-opening-hours></span></span>
+            <span>📞 <a data-hotline-link data-hotline-text href="#"></a></span>
+          </p>
+        </div>
+        <div class="hero-logo">
+          <img src="assets/images/logo.png" alt="" width="520" height="520">
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== GIỚI THIỆU ===== -->
+    <section class="section" id="gioi-thieu">
+      <div class="container about">
+        <div class="about-text">
+          <h2 class="section-title" data-about-title>Về Hana</h2>
+          <div data-about-paragraphs></div>
+        </div>
+        <ul class="highlights" data-about-highlights></ul>
+      </div>
+    </section>
+
+    <!-- ===== BẢNG GIÁ ===== -->
+    <section class="section section-alt" id="bang-gia">
+      <div class="container">
+        <h2 class="section-title center" data-pricing-title>Bảng giá buffet</h2>
+        <div class="price-grid" data-pricing-packages></div>
+        <ul class="price-notes" data-pricing-notes></ul>
+      </div>
+    </section>
+
+    <!-- ===== MENU ===== -->
+    <section class="section" id="menu">
+      <div class="container">
+        <h2 class="section-title center">Menu</h2>
+        <div class="menu-tabs" role="tablist" aria-label="Danh mục món" data-menu-tabs></div>
+        <div class="menu-body" data-menu-body></div>
+      </div>
+    </section>
+
+    <!-- ===== CHI NHÁNH ===== -->
+    <section class="section section-alt" id="chi-nhanh">
+      <div class="container">
+        <h2 class="section-title center">Hệ thống chi nhánh</h2>
+        <div class="chip-row" data-branch-filter></div>
+        <div class="branch-grid" data-branch-list></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <img src="assets/images/logo.png" alt="Hana BBQ & Hot Pot Buffet" width="96" height="96" loading="lazy">
+        <p data-brand-name>Hana BBQ &amp; Hot Pot Buffet</p>
+      </div>
+      <div>
+        <h3>Liên hệ</h3>
+        <p>Hotline: <a data-hotline-link data-hotline-text href="#"></a></p>
+        <p>Giờ mở cửa: <span data-opening-hours></span></p>
+      </div>
+      <div>
+        <h3>Theo dõi Hana</h3>
+        <div class="socials" data-socials></div>
+      </div>
+    </div>
+    <p class="copyright">© <span data-year></span> <span data-brand-name>Hana BBQ &amp; Hot Pot Buffet</span></p>
+  </footer>
+
+  <!-- Nút gọi nổi (hiện trên điện thoại) -->
+  <a class="call-fab" data-hotline-link href="#" aria-label="Gọi đặt bàn">📞 Gọi đặt bàn</a>
+
+  <!-- data.js phải nạp TRƯỚC main.js -->
+  <script src="data/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
